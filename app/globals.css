@@ -8,6 +8,7 @@
   --soft: #eef4f8;
   --white: #ffffff;
   --max: 1240px;
+  --wide: 1560px;
 }
 
 * {
@@ -60,7 +61,7 @@ textarea {
 }
 
 .utility-inner {
-  width: min(var(--max), calc(100% - 48px));
+  width: min(var(--wide), calc(100% - 72px));
   min-height: 34px;
   margin: 0 auto;
   display: flex;
@@ -90,7 +91,7 @@ textarea {
 
 .header-inner {
   position: relative;
-  width: min(var(--max), calc(100% - 48px));
+  width: min(var(--wide), calc(100% - 72px));
   height: 82px;
   margin: 0 auto;
   display: grid;
@@ -388,8 +389,8 @@ textarea {
   position: relative;
   overflow: hidden;
   background:
-    linear-gradient(90deg, rgba(5, 30, 56, 0.98) 0%, rgba(6, 35, 65, 0.83) 34%, rgba(5, 28, 50, 0.16) 64%, rgba(5, 28, 50, 0.02) 100%),
-    url("/hero-welding-banner.png") center center / cover no-repeat;
+    linear-gradient(90deg, rgba(5, 30, 56, 0.98) 0%, rgba(6, 35, 65, 0.9) 34%, rgba(5, 28, 50, 0.5) 58%, rgba(5, 28, 50, 0.16) 100%),
+    url("/hero-welding-banner.png") 72% center / cover no-repeat;
 }
 
 .hero-label {
@@ -402,33 +403,33 @@ textarea {
 }
 
 .hero-inner {
-  width: min(var(--max), calc(100% - 48px));
-  min-height: 650px;
+  width: min(var(--wide), calc(100% - 72px));
+  min-height: clamp(650px, 78vh, 820px);
   margin: 0 auto;
   display: flex;
   align-items: center;
 }
 
 .hero-copy {
-  width: min(610px, 54%);
-  padding: 80px 0 84px;
+  width: min(690px, 48vw);
+  padding: clamp(88px, 10vh, 150px) 0;
 }
 
 .hero h1 {
-  max-width: 620px;
+  max-width: 690px;
   margin: 0 0 26px;
   color: white;
-  font-size: clamp(44px, 4vw, 58px);
+  font-size: clamp(48px, 4.15vw, 72px);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   line-height: 1.02;
 }
 
 .hero-copy > p {
-  max-width: 590px;
+  max-width: 640px;
   margin: 0;
   color: #d6e4ef;
-  font-size: 18px;
+  font-size: clamp(18px, 1.1vw, 21px);
   line-height: 1.75;
 }
 

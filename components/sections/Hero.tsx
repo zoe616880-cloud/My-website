@@ -6,7 +6,7 @@ export function Hero() {
     <section className="hero">
       <div className="hero-inner">
         <div className="hero-copy">
-          <div className="hero-label">Source manufacturer · OEM/ODM partner</div>
+          <div className="hero-label">Source manufacturer / OEM/ODM partner</div>
           <h1>Industrial Weighing, Built Around Your Application.</h1>
           <p>
             Custom bench scales, floor scales and industrial weighing
