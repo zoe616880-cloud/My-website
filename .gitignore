@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.npm-cache/
+preview.log
+preview-error.log
+preview-home.html
+static-preview.log
+static-preview-error.log
+static-preview-server.js
+START_FULL_PREVIEW.bat
+npm-debug.log*
+dev-server*.log
+exports/

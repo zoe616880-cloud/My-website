@@ -9,23 +9,24 @@ export function SiteFooter() {
         <div className="footer-brand">
           <Image src="/logo-white.png" alt="Asia Weighing" width={176} height={48} />
           <p>
-            Source manufacturer and OEM/ODM partner for industrial weighing
-            equipment.
+            Industrial weighing manufacturer for configurable scale structures,
+            weighing components and export-ready project supply.
           </p>
         </div>
         <div>
           <h3>Products</h3>
-          <Link href="/products/bench-scales">Bench Scales</Link>
-          <Link href="/products/floor-scales">Floor Scales</Link>
-          <Link href="/products/mobile-u-shape-scales">Mobile Scales</Link>
-          <Link href="/products/animal-special-scales">Animal Scales</Link>
+          <Link href="/products?category=truck-scales">Truck Scales</Link>
+          <Link href="/products?category=industrial-floor-scales">Industrial Floor Scales</Link>
+          <Link href="/products?category=industrial-platform-scales">Industrial Platform Scales</Link>
+          <Link href="/products?category=portable-axle-weighers">Portable Axle Weighers</Link>
+          <Link href="/products?category=load-cells-sensors">Load Cells & Sensors</Link>
         </div>
         <div>
           <h3>Company</h3>
-          <Link href="/about">About Us</Link>
-          <Link href="/solutions">Solutions</Link>
-          <Link href="/oem-odm">OEM/ODM</Link>
-          <Link href="/resources">Resources</Link>
+          <Link href="/about">About Asia Weighing</Link>
+          <Link href="/news">News Center</Link>
+          <Link href="/products">Products Catalog</Link>
+          <Link href="/request-a-quote">Request a Quote</Link>
         </div>
         <div>
           <h3>Contact</h3>
@@ -41,8 +42,8 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Asia Weighing</span>
-        <span>Professional B2B industrial weighing solutions</span>
+        <span>Copyright {new Date().getFullYear()} Asia Weighing</span>
+        <span>Industrial scales, weighing components and project support</span>
       </div>
     </footer>
   );

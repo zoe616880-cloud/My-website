@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, MessageCircle } from "@/components/icons";
-import { Header } from "@/components/Header";
+import { GoogleMapCard } from "@/components/GoogleMapCard";
 import { QuoteForm } from "@/components/QuoteForm";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 export default function QuotePage() {
   return (
     <>
-      <Header />
       <main className="quote-page">
         <section className="quote-page-inner">
           <div className="quote-page-intro">
@@ -34,6 +33,7 @@ export default function QuotePage() {
             <QuoteForm />
           </div>
         </section>
+        <GoogleMapCard className="quote-map-card" />
       </main>
       <SiteFooter />
     </>

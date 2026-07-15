@@ -1,49 +1,70 @@
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, Check } from "@/components/icons";
+import { ArrowRight } from "@/components/icons";
 import { products } from "@/data/site-data";
+import type { HomeSectionConfig } from "@/data/home-page";
+import { homePartClass, homePartStyle } from "@/lib/home-parts";
+import { ProductCarousel } from "@/components/sections/ProductCarousel";
 
-export function ProductShowcase() {
+export function ProductShowcase({ config }: { config?: HomeSectionConfig }) {
+  const displayProducts = [
+    {
+      ...products[0],
+      title: "Bench Scale",
+      image: "/uploads/products/transparent-home/centered/official-counting-bench-scale.png",
+    },
+    {
+      ...products[3],
+      title: "Guardrail Platform Scale",
+      image: "/uploads/products/transparent-home/centered/industrial-platform-scales-guardrail-platform-scale.png",
+    },
+    {
+      ...products[1],
+      title: "Floor Scale",
+      image: "/uploads/products/transparent-home/centered/truck-scales-steel-deck-above-ground-truck-scale.png",
+    },
+    {
+      ...products[2],
+      title: "Mobile Floor Scale",
+      image: "/uploads/products/transparent-home/centered/portable-axle-weighers-portable-axle-weigher.png",
+    },
+    {
+      ...products[0],
+      title: "Electronic Scale",
+      image: "/uploads/products/transparent-home/centered/official-electronic-scale.png",
+    },
+    {
+      ...products[1],
+      title: "Weighing Module",
+      image: "/uploads/products/transparent-home/centered/official-weighing-module-system.png",
+    },
+    {
+      ...products[2],
+      title: "Truck Scale",
+      image: "/uploads/products/transparent-home/centered/truck-scales-steel-concrete-deck-above-ground-truck-scale.png",
+    },
+  ].map((product, index) => ({
+    ...product,
+    id: `${product.title}-${index}`,
+    title: index > 3 ? product.title : product.title,
+  }));
+
   return (
-    <section className="section product-section" id="products">
-      <div className="section-heading">
-        <div>
-          <p className="section-index">01 / Product families</p>
-          <h2>Build the right scale from a proven platform.</h2>
+    <section className={`section product-section product-layout-${config?.layout || "portfolio"} home-bg-${config?.background || "white"} home-spacing-${config?.spacing || "standard"}`} id="products">
+      <div className="product-watermark" aria-hidden="true">Products</div>
+      <div className="product-portfolio">
+        <div className={homePartClass(config, "intro", "product-portfolio-intro")} style={homePartStyle(config, "intro")}>
+          <p>{config?.copy || "Select by application and build the right weighing system faster."}</p>
         </div>
-        <p>
-          Start with the application, not a model number. We configure the
-          structure, sensing and display around how the scale will be used.
-        </p>
-      </div>
-      <div className="product-grid">
-        {products.map((product, index) => (
-          <article className="product-card" key={product.title}>
-            <Link href={product.href} className="product-image">
-              <Image 
-                src={product.image} 
-                alt={product.title} 
-                width={400} 
-                height={300} 
-                style={{ objectFit: 'contain', width: '100%', height: 'auto' }}
-              />
-            </Link>
-            <div className="product-meta">
-              <span>0{index + 1}</span>
-              <span>{product.type}</span>
-            </div>
-            <h3>{product.title}</h3>
-            <p>{product.copy}</p>
-            <ul className="product-specs">
-              {product.specs.map((spec) => (
-                <li key={spec}><Check size={15} /> {spec}</li>
-              ))}
-            </ul>
-            <Link className="text-link" href={product.href}>
-              View product direction <ArrowRight size={17} />
-            </Link>
-          </article>
-        ))}
+
+        <div className={homePartClass(config, "cards", "product-skyline product-carousel-wrap")} style={homePartStyle(config, "cards")}>
+          <ProductCarousel products={displayProducts} />
+        </div>
+
+        <div className="product-portfolio-action">
+          <Link className={homePartClass(config, "button", "product-portfolio-button")} style={homePartStyle(config, "button")} href="/products">
+            {config?.buttonLabel || "Explore products"} <ArrowRight size={15} />
+          </Link>
+        </div>
       </div>
     </section>
   );

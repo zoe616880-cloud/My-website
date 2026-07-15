@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check, Settings, ShieldCheck } from "@/components/icons";
-import { Header } from "@/components/Header";
+import { ArrowRight, ClipboardList, MessageCircle, PackageCheck, Settings, ShieldCheck, Truck } from "@/components/icons";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getProduct, products } from "@/data/products";
 
@@ -28,15 +27,33 @@ export async function generateMetadata({
 export default async function ProductPage({ params }: ProductPageProps) {
   const product = getProduct((await params).slug);
   if (!product) notFound();
-  const related = products.filter((item) => item.slug !== product.slug).slice(0, 3);
+  const categories = Array.from(new Set(products.map((item) => item.category)));
+  const availableSizes =
+    product.specifications.find(([label]) => label === "Available sizes")?.[1]
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean) ?? [];
+  const availableCapacities =
+    product.specifications.find(([label]) => label === "Available capacities")?.[1]
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean) ?? [];
+  const specificationRows = product.specifications.filter(
+    ([label]) => label !== "Product style" && label !== "Category",
+  );
 
   return (
     <>
-      <Header />
-      <main>
-        <section className="product-detail-hero">
-          <div className="product-detail-inner">
-            <div className="product-detail-copy">
+      <main className="product-catalog-detail-page">
+        <section className="catalog-detail-hero">
+          <div className="catalog-detail-hero-inner">
+            <div className="catalog-detail-media">
+              <img src={product.image} alt={product.name} />
+              <a className="catalog-whatsapp" href="https://wa.me/8613775237471?text=Hello%2C%20I%20am%20interested%20in%20your%20products.%20Please%20send%20me%20more%20details.">
+                <MessageCircle size={15} /> WhatsApp
+              </a>
+            </div>
+            <div className="catalog-detail-copy">
               <div className="breadcrumbs">
                 <a href="/">Home</a><span>/</span>
                 <a href="/products">Products</a><span>/</span>
@@ -45,99 +62,118 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <p className="detail-category">{product.category}</p>
               <h1>{product.name}</h1>
               <p className="detail-lead">{product.longDescription}</p>
+              <div className="catalog-detail-stats">
+                <div><strong>{availableSizes.length || "Custom"}</strong><span>Size Options</span></div>
+                <div><strong>{availableCapacities.length || "By RFQ"}</strong><span>Capacity Range</span></div>
+                <div><strong>Export</strong><span>Project Supply</span></div>
+              </div>
               <div className="detail-actions">
                 <a className="button" href="/request-a-quote">
                   Request a Quote <ArrowRight size={18} />
                 </a>
                 <a className="button button-outline" href="#specifications">
-                  View Specifications
+                  Technical Data Sheet
                 </a>
               </div>
             </div>
-            <div className="product-detail-image">
-              <img src={product.image} alt={product.name} />
-            </div>
           </div>
         </section>
 
-        <section className="detail-proof">
-          <div><small>Capacity</small><strong>{product.capacities}</strong></div>
-          <div><small>Material</small><strong>{product.materials}</strong></div>
-          <div><small>Supply</small><strong>OEM / ODM configuration</strong></div>
-        </section>
-
-        <section className="inner-section detail-overview">
-          <div>
-            <p className="inner-kicker">Application fit</p>
-            <h2>Designed around the actual weighing workflow.</h2>
-            <div className="application-tags">
-              {product.applications.map((item) => <span key={item}>{item}</span>)}
-            </div>
-          </div>
-          <div className="feature-panel">
-            <h3>Platform highlights</h3>
-            {product.features.map((feature) => (
-              <div key={feature}><Check size={18} /> {feature}</div>
-            ))}
-          </div>
-        </section>
-
-        <section className="spec-section" id="specifications">
-          <div className="inner-section spec-layout">
-            <div className="spec-intro">
-              <p className="inner-kicker light">Technical overview</p>
-              <h2>Confirm the specification before quotation.</h2>
-              <p>
-                Final values depend on platform size, load distribution,
-                environment and interface requirements.
-              </p>
-            </div>
-            <div className="spec-table">
-              {product.specifications.map(([label, value]) => (
-                <div key={label}><span>{label}</span><strong>{value}</strong></div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="inner-section custom-detail">
-          <div className="custom-detail-title">
-            <Settings size={28} />
-            <p className="inner-kicker">Configurable supply</p>
-            <h2>Adapt the scale to your project.</h2>
-          </div>
-          <div className="custom-list">
-            {product.customization.map((item, index) => (
-              <div key={item}><span>0{index + 1}</span><strong>{item}</strong></div>
-            ))}
-          </div>
-          <div className="engineering-note">
-            <ShieldCheck size={25} />
-            <p>
-              Share the maximum load, required division, platform size,
-              quantity and destination. Our team will review the complete
-              system rather than quote the platform alone.
-            </p>
-            <a href="/request-a-quote">Start an RFQ <ArrowRight size={17} /></a>
-          </div>
-        </section>
-
-        <section className="related-section">
-          <div className="inner-section">
-            <div className="inner-heading compact">
-              <p>Related products</p>
-              <h2>Compare other weighing platforms.</h2>
-            </div>
-            <div className="related-grid">
-              {related.map((item) => (
-                <a href={`/products/${item.slug}`} key={item.slug}>
-                  <img src={item.image} alt={item.name} />
-                  <span>{item.category}</span>
-                  <strong>{item.name}</strong>
-                  <ArrowRight size={18} />
+        <section className="catalog-detail-body">
+          <aside className="catalog-detail-sidebar">
+            <div className="catalog-side-card">
+              <strong>Product Categories</strong>
+              {categories.map((category) => (
+                <a className={category === product.category ? "active" : ""} href={`/products#${category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} key={category}>
+                  <PackageCheck size={14} /> {category}
                 </a>
               ))}
             </div>
+            <div className="catalog-engineer-card">
+              <MessageCircle size={22} />
+              <h3>Need a Custom Size?</h3>
+              <p>Send capacity, platform size, quantity and working site photos for engineering review.</p>
+              <a href="/request-a-quote">Consult Engineering</a>
+            </div>
+          </aside>
+
+          <div className="catalog-detail-content">
+            <section className="catalog-panel" id="specifications">
+              <div className="catalog-section-title">
+                <span></span>
+                <h2>Technical Specifications</h2>
+              </div>
+              <div className="catalog-spec-table">
+                <div><strong>Parameter</strong><strong>Detailed Specifications</strong></div>
+                {specificationRows.map(([label, value]) => (
+                  <div key={label}><span>{label}</span><span>{value}</span></div>
+                ))}
+              </div>
+            </section>
+
+            <section className="catalog-panel">
+              <div className="catalog-section-title">
+                <span></span>
+                <h2>Available Sizes and Capacity Options</h2>
+              </div>
+              <div className="catalog-size-grid">
+                <div>
+                  <h3>Available Sizes</h3>
+                  <div>{availableSizes.map((size) => <span key={size}>{size}</span>)}</div>
+                </div>
+                <div>
+                  <h3>Capacity Options</h3>
+                  <div>{availableCapacities.map((capacity) => <span key={capacity}>{capacity}</span>)}</div>
+                </div>
+              </div>
+              <p className="catalog-note">
+                The dimensions above are grouped from this product style. Final quotation can combine platform size,
+                load cell model, signal type and export packing requirements.
+              </p>
+            </section>
+
+            <section className="catalog-panel">
+              <div className="catalog-section-title">
+                <span></span>
+                <h2>Structural Advantages</h2>
+              </div>
+              <div className="catalog-advantage-grid">
+                {product.features.map((feature) => (
+                  <article key={feature}>
+                    <ShieldCheck size={18} />
+                    <h3>{feature}</h3>
+                    <p>Configured for stable industrial weighing, shipment inspection and project installation preparation.</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="catalog-panel">
+              <div className="catalog-section-title">
+                <span></span>
+                <h2>Application Scenarios</h2>
+              </div>
+              <div className="catalog-application-grid">
+                {product.applications.map((item) => (
+                  <article key={item}>
+                    <Truck size={20} />
+                    <strong>{item}</strong>
+                    <span>Suitable for daily weighing, dispatch control and incoming material inspection.</span>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="catalog-panel">
+              <div className="catalog-section-title">
+                <span></span>
+                <h2>Recommended Accessories</h2>
+              </div>
+              <div className="catalog-accessory-grid">
+                <a href="/request-a-quote"><ClipboardList size={20} /><strong>Indicator and Display</strong><span>Match signal output and working environment.</span><em>View Details <ArrowRight size={13} /></em></a>
+                <a href="/request-a-quote"><Settings size={20} /><strong>Load Cell and Junction Box</strong><span>Select by capacity, division and protection rating.</span><em>View Details <ArrowRight size={13} /></em></a>
+              </div>
+            </section>
           </div>
         </section>
       </main>

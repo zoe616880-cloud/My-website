@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { ArrowRight, Check } from "@/components/icons";
-import { Header } from "@/components/Header";
-import { PageHero } from "@/components/PageHero";
 import { SiteFooter } from "@/components/SiteFooter";
 import { products } from "@/data/products";
 
@@ -12,47 +10,92 @@ export const metadata: Metadata = {
   alternates: { canonical: "/products" },
 };
 
-export default function ProductsPage() {
+type ProductsPageProps = {
+  searchParams?: Promise<{ category?: string }>;
+};
+
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const categories = Array.from(new Set(products.map((product) => product.category)));
+  const categoryId = (category: string) => category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const params = await searchParams;
+  const selectedCategoryId = params?.category ?? "all";
+  const selectedCategory = categories.find((category) => categoryId(category) === selectedCategoryId);
+  const visibleProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+  const renderProductCards = (items: typeof products) =>
+    items.map((product) => (
+      <article className="catalog-card" key={product.slug}>
+        <a href={`/products/${product.slug}`} className="catalog-image">
+          <img src={product.image} alt={product.name} />
+        </a>
+        <div className="catalog-copy">
+          <small>{product.category}</small>
+          <h3>{product.name}</h3>
+          <p>{product.longDescription}</p>
+          <ul>
+            <li><Check size={15} /> {product.capacities}</li>
+            <li><Check size={15} /> {product.materials}</li>
+          </ul>
+          <a href={`/products/${product.slug}`} className="text-link">
+            View product details <ArrowRight size={17} />
+          </a>
+        </div>
+      </article>
+    ));
+
   return (
     <>
-      <Header />
       <main>
-        <PageHero
-          eyebrow="Industrial weighing equipment"
-          title="Choose a platform. Configure it for your operation."
-          description="Compare our core weighing platforms by load, working environment and installation method, then configure capacity, dimensions, material and interface."
-          image="/floor-scale.jpg"
-        />
-        <section className="inner-section">
-          <div className="inner-heading">
-            <p>Core product families</p>
-            <h2>Four starting points for industrial weighing.</h2>
-            <span>
-              Each platform can be adapted for importers, distributors,
-              contractors and project procurement.
-            </span>
+        <section className="inner-section products-list-section">
+          <div className="products-catalog-header">
+            <div>
+              <p>Products Catalog</p>
+              <h1>Industrial weighing products</h1>
+              <span>
+                Browse product styles by category and open each product page for
+                sizes, capacities, materials and configuration details.
+              </span>
+            </div>
+            <div className="products-catalog-summary">
+              <strong>{products.length}</strong>
+              <span>Product styles</span>
+              <strong>{categories.length}</strong>
+              <span>Categories</span>
+              <a href="/request-a-quote">
+                Send Requirements <ArrowRight size={16} />
+              </a>
+            </div>
           </div>
-          <div className="catalog-grid">
-            {products.map((product, index) => (
-              <article className="catalog-card" key={product.slug}>
-                <a href={`/products/${product.slug}`} className="catalog-image">
-                  <img src={product.image} alt={product.name} />
-                  <span>0{index + 1}</span>
+          <div className="products-catalog-layout">
+            <aside className="product-category-sidebar" aria-label="Product categories">
+              <strong>Categories</strong>
+              <a href="/products" className={!selectedCategory ? "active" : undefined}>
+                All Products
+                <span>{products.length}</span>
+              </a>
+              {categories.map((category) => (
+                <a
+                  href={`/products?category=${categoryId(category)}`}
+                  className={selectedCategory === category ? "active" : undefined}
+                  key={category}
+                >
+                  {category}
+                  <span>{products.filter((product) => product.category === category).length}</span>
                 </a>
-                <div className="catalog-copy">
-                  <small>{product.category}</small>
-                  <h3>{product.name}</h3>
-                  <p>{product.description}</p>
-                  <ul>
-                    <li><Check size={15} /> {product.capacities}</li>
-                    <li><Check size={15} /> {product.materials}</li>
-                  </ul>
-                  <a href={`/products/${product.slug}`} className="text-link">
-                    View product details <ArrowRight size={17} />
-                  </a>
+              ))}
+            </aside>
+            <div className="product-category-content">
+              <section className="product-category-group">
+                <div className="product-category-heading">
+                  <p>{visibleProducts.length} styles</p>
+                  <h3>{selectedCategory ?? "All Products"}</h3>
                 </div>
-              </article>
-            ))}
+                <div className="catalog-grid">
+                  {renderProductCards(visibleProducts)}
+                </div>
+              </section>
+            </div>
           </div>
         </section>
         <section className="selection-band">

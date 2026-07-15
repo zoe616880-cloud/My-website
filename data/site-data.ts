@@ -1,4 +1,4 @@
-import {
+﻿import {
   Box,
   ClipboardList,
   DraftingCompass,
@@ -14,38 +14,37 @@ import {
 export const products = [
   {
     title: "Industrial Bench Scales",
-    type: "Bench weighing",
-    copy: "Compact platforms for production, packing and warehouse workstations.",
+    type: "Bench Weighing",
+    copy: "Compact bench scale platform for packing, counting, inspection and workstation weighing.",
     image: "/bench-scale-white.png",
-    href: "/products/bench-scales",
-    specs: ["Mild or stainless steel", "150–600 kg catalog range", "RS-232 options"],
+    href: "/products?category=industrial-platform-scales",
+    specs: ["Bench platform with indicator", "Stainless or painted steel options", "30 kg to 600 kg range"],
   },
   {
-    title: "Heavy-Duty Floor Scales",
-    type: "Floor weighing",
-    copy: "Rugged low-profile platforms for pallets, carts and industrial loads.",
-    image: "/floor-scale.jpg",
-    href: "/products/floor-scales",
-    specs: ["Checker or plain plate", "1,000–5,000 kg catalog range", "Custom platform sizes"],
+    title: "Mild Steel Floor Scale",
+    type: "Industrial Floor Scales",
+    copy: "Low profile floor scale for pallet, cart and heavy load weighing in warehouses and factories.",
+    image: "/uploads/products/industrial-floor-scales-standard-mild-steel-floor-scale.jpg",
+    href: "/products/industrial-floor-scales-standard-mild-steel-floor-scale",
+    specs: ["Configured by model", "Mild steel or stainless steel options", "Ramp and low-profile installation"],
   },
   {
-    title: "U-Shape & Mobile Scales",
-    type: "Mobile weighing",
-    copy: "Portable structures designed for fast loading and flexible work areas.",
-    image: "/u-shape-scale.jpg",
-    href: "/products/mobile-u-shape-scales",
-    specs: ["Integrated mobility options", "Low loading profile", "Custom structure"],
+    title: "Mobile Floor Scale",
+    type: "Industrial Floor Scales",
+    copy: "Mobile floor scale for flexible pallet, cart and heavy load weighing in changing work areas.",
+    image: "/uploads/products/industrial-floor-scales-mobile-floor-scale.jpg",
+    href: "/products/industrial-floor-scales-mobile-floor-scale",
+    specs: ["Configured by model", "Mild steel or stainless steel options", "Mobile structure for flexible use"],
   },
   {
-    title: "Animal & Special Scales",
-    type: "Application-specific",
-    copy: "Guardrail and special-purpose platforms configured for the actual workflow.",
-    image: "/animal-scale.jpg",
-    href: "/products/animal-special-scales",
-    specs: ["Animal weighing mode", "Custom capacity and size", "Custom guardrails"],
+    title: "Guardrail Platform Scale",
+    type: "Industrial Platform Scales",
+    copy: "Guardrail platform scale for packing, counting, receiving and controlled production line weighing.",
+    image: "/uploads/products/industrial-platform-scales-guardrail-platform-scale.png",
+    href: "/products/industrial-platform-scales-guardrail-platform-scale",
+    specs: ["60 kg capacity option", "Mild steel or stainless steel options", "Guardrail structure for safer loading"],
   },
 ];
-
 export const process = [
   { icon: ClipboardList, title: "Requirements", copy: "Application, target capacity and dimensions" },
   { icon: DraftingCompass, title: "Engineering", copy: "Structure, material and indicator selection" },
@@ -75,8 +74,8 @@ export const faqs = [
     answer: "Please provide the product type, application, maximum load, required division, platform size, quantity, destination country and any interface requirements.",
   },
   {
-    question: "Can you provide OEM or ODM support?",
-    answer: "Yes. OEM and ODM support can cover dimensions, structure, material, indicator selection, data interface and brand presentation.",
+    question: "Can you customize the structure and interface?",
+    answer: "Yes. Custom support can cover dimensions, structure, material, indicator selection, data interface and brand presentation.",
   },
 ];
 
@@ -86,21 +85,27 @@ export const megaMenus = {
     eyebrow: "Weighing equipment",
     title: "Industrial scales built for the way you work.",
     items: [
-      { icon: Gauge, title: "Bench Scales", copy: "Compact production and packing platforms", href: "/products/bench-scales" },
-      { icon: Box, title: "Floor Scales", copy: "Heavy-duty pallet and industrial weighing", href: "/products/floor-scales" },
-      { icon: Warehouse, title: "Mobile & U-Shape", copy: "Flexible loading for changing work areas", href: "/products/mobile-u-shape-scales" },
-      { icon: ShieldCheck, title: "Animal & Special", copy: "Application-specific structures and guardrails", href: "/products/animal-special-scales" },
+      { icon: Warehouse, title: "Truck Scales", copy: "Above-ground and pit-mounted truck weighing systems", href: "/products?category=truck-scales" },
+      { icon: Gauge, title: "Portable Axle Weighers", copy: "Portable axle weighing for vehicles and field checks", href: "/products?category=portable-axle-weighers" },
+      { icon: Box, title: "Industrial Platform Scales", copy: "Bench, counting and platform weighing equipment", href: "/products?category=industrial-platform-scales" },
+      { icon: Factory, title: "Industrial Floor Scales", copy: "Low-profile, mobile and stainless steel floor scales", href: "/products?category=industrial-floor-scales" },
+      { icon: ClipboardList, title: "Table Top Scales", copy: "Compact table top scales for daily weighing work", href: "/products?category=table-top-scales" },
+      { icon: Gauge, title: "Balances", copy: "Analytical and electronic balances for precise weighing", href: "/products?category=balances" },
+      { icon: Settings, title: "Weighing Solutions", copy: "Dynamic and static tank scale project solutions", href: "/products?category=weighing-solutions" },
+      { icon: PackageCheck, title: "Weighing Module Systems", copy: "Module systems for tanks, hoppers and structures", href: "/products?category=weighing-module-systems" },
+      { icon: ShieldCheck, title: "Load Cells & Sensors", copy: "Load cells and sensors for scale integration", href: "/products?category=load-cells-sensors" },
     ],
   },
-  solutions: {
-    label: "Solutions",
-    eyebrow: "Application engineering",
-    title: "Start with the load, environment and workflow.",
+  news: {
+    label: "News",
+    eyebrow: "News and blog",
+    title: "Updates, guides and practical weighing knowledge.",
     items: [
-      { icon: Warehouse, title: "Warehouse & Logistics", copy: "Receiving, inventory and dispatch weighing", href: "/solutions" },
-      { icon: Factory, title: "Industrial Manufacturing", copy: "Process, batching and production workflows", href: "/solutions" },
-      { icon: Gauge, title: "Farm & Livestock", copy: "Stable systems for animal and farm use", href: "/solutions" },
-      { icon: Waves, title: "Wet Environments", copy: "Stainless configurations for frequent cleaning", href: "/solutions" },
+      { icon: ClipboardList, title: "Buying Guides", copy: "Selection and procurement notes", href: "/news" },
+      { icon: Factory, title: "Factory Updates", copy: "Manufacturing and project news", href: "/news" },
+      { icon: Gauge, title: "Product Knowledge", copy: "Scale application and configuration tips", href: "/news" },
+      { icon: ShieldCheck, title: "Maintenance Notes", copy: "Care, inspection and usage guidance", href: "/news" },
     ],
   },
 } as const;
+

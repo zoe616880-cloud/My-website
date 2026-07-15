@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import type { CSSProperties } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   ArrowRight,
   Mail,
-  MapPin,
   Menu,
-  MessageCircle,
   X,
 } from "./icons";
 import { megaMenus } from "@/data/site-data";
@@ -18,24 +18,57 @@ type MegaMenuKey = keyof typeof megaMenus;
 export function Header() {
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<MegaMenuKey | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [routeSettled, setRouteSettled] = useState(false);
+  const pathname = usePathname();
   const menu = activeMenu ? megaMenus[activeMenu] : null;
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isHome = pathname === "/";
+  const isAdmin = pathname.startsWith("/admin");
+  const scrolled = scrollProgress > 0.98;
+  const headerStyle = isHome
+    ? ({ "--header-progress": scrollProgress } as CSSProperties)
+    : undefined;
+
+  useEffect(() => {
+    setRouteSettled(false);
+    let nextFrame = 0;
+    const frame = window.requestAnimationFrame(() => {
+      nextFrame = window.requestAnimationFrame(() => setRouteSettled(true));
+    });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      if (nextFrame) window.cancelAnimationFrame(nextFrame);
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isHome) {
+      setScrollProgress(0);
+      return;
+    }
+
+    const updateProgress = () => {
+      const progress = Math.min(Math.max(window.scrollY / 160, 0), 1);
+      setScrollProgress(Number(progress.toFixed(3)));
+    };
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    return () => window.removeEventListener("scroll", updateProgress);
+  }, [isHome]);
+
+  if (isAdmin) return null;
 
   return (
-    <header className="site-header" onMouseLeave={() => setActiveMenu(null)}>
-      <div className="utility-bar">
-        <div className="utility-inner">
-          <div className="utility-facts">
-            <span>Industrial weighing manufacturer since 2006</span>
-            <span><MapPin size={13} /> Changzhou, Jiangsu, China</span>
-          </div>
-          <a href="https://wa.me/8613775237471">
-            <MessageCircle size={14} /> WhatsApp: +86 137 7523 7471
-          </a>
-        </div>
-      </div>
+    <header
+      className={`site-header${isHome ? " site-header-home" : ""}${scrolled ? " site-header-scrolled" : ""}${routeSettled ? " site-header-route-settled" : " site-header-route-transition"}`}
+      style={headerStyle}
+      onMouseLeave={() => setActiveMenu(null)}
+    >
       <div className="header-inner">
         <Link className="brand" href="/" aria-label="Asia Weighing home" style={{ display: 'block', width: '176px', height: '48px' }}>
           <Image 
+            className="brand-logo brand-logo-default"
             src="/logo.png" 
             alt="Asia Weighing" 
             width={176} 
@@ -43,42 +76,47 @@ export function Header() {
             priority 
             style={{ width: '176px', height: '48px', objectFit: 'contain' }}
           />
+          {isHome ? (
+            <Image
+              className="brand-logo brand-logo-white"
+              src="/logo-white.png"
+              alt=""
+              width={176}
+              height={48}
+              priority
+              aria-hidden="true"
+              style={{ width: '176px', height: '48px', objectFit: 'contain' }}
+            />
+          ) : null}
         </Link>
         <div className="nav-stage">
-          <nav className="desktop-nav" aria-label="Main navigation" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            {(["products", "solutions"] as const).map((key) => (
-              <button
-                className={activeMenu === key ? "active" : ""}
+          <nav className="desktop-nav" aria-label="Main navigation">
+            <Link className={isActive("/") ? "current" : ""} href="/" onClick={() => setActiveMenu(null)}>Home</Link>
+            {(["products", "news"] as const).map((key) => (
+              <Link
+                className={`${activeMenu === key ? "active" : ""} ${isActive(key === "products" ? "/products" : "/news") ? "current" : ""}`.trim()}
                 key={key}
-                type="button"
-                style={{ border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                href={key === "products" ? "/products" : "/news"}
                 aria-expanded={activeMenu === key}
                 aria-controls="desktop-mega-menu"
                 onFocus={() => setActiveMenu(key)}
                 onMouseEnter={() => setActiveMenu(key)}
+                onClick={() => setActiveMenu(null)}
               >
                 {megaMenus[key].label}
                 <span className="nav-caret" aria-hidden="true" />
-              </button>
+              </Link>
             ))}
-            <Link href="/oem-odm" onClick={() => setActiveMenu(null)} style={{ fontWeight: 'bold' }}>OEM/ODM</Link>
-            <Link href="/about" onClick={() => setActiveMenu(null)} style={{ fontWeight: 'bold' }}>About</Link>
-            <Link href="/resources" onClick={() => setActiveMenu(null)} style={{ fontWeight: 'bold' }}>Resources</Link>
+            <Link className={isActive("/about") ? "current" : ""} href="/about" onClick={() => setActiveMenu(null)}>About</Link>
+            <Link className={isActive("/request-a-quote") ? "current" : ""} href="/request-a-quote" onClick={() => setActiveMenu(null)}>Contact</Link>
           </nav>
 
           {menu ? (
             <div
-              className="mega-menu"
+              className={`mega-menu mega-menu-${activeMenu}`}
               id="desktop-mega-menu"
               onMouseEnter={() => setActiveMenu(activeMenu)}
             >
-              <div className="mega-intro">
-                <span>{menu.eyebrow}</span>
-                <h2>{menu.title}</h2>
-                <Link href={activeMenu === "products" ? "/products" : "/solutions"}>
-                  Explore all {menu.label.toLowerCase()} <ArrowRight size={17} />
-                </Link>
-              </div>
               <div className="mega-links">
                 {menu.items.map(({ icon: Icon, title, copy, href }) => (
                   <Link href={href} key={title} onClick={() => setActiveMenu(null)}>
@@ -99,7 +137,7 @@ export function Header() {
             <Mail size={16} aria-hidden="true" />
             ida@asiaweigh.com
           </a>
-          <Link className="button button-small" href="/request-a-quote">
+          <Link className="button button-small header-quote" href="/request-a-quote">
             Get a Quote
           </Link>
           <button
@@ -114,12 +152,12 @@ export function Header() {
         </div>
       </div>
       {open ? (
-        <nav className="mobile-nav" aria-label="Mobile navigation" style={{ display: 'flex', flexDirection: 'column', padding: '20px', gap: '15px', background: 'white', borderTop: '1px solid #eee' }}>
+        <nav className="mobile-nav" aria-label="Mobile navigation">
+          <Link href="/" onClick={() => setOpen(false)}>Home</Link>
           <Link href="/products" onClick={() => setOpen(false)}>Products</Link>
-          <Link href="/solutions" onClick={() => setOpen(false)}>Solutions</Link>
-          <Link href="/oem-odm" onClick={() => setOpen(false)}>OEM/ODM</Link>
+          <Link href="/news" onClick={() => setOpen(false)}>News</Link>
           <Link href="/about" onClick={() => setOpen(false)}>About Us</Link>
-          <Link href="/resources" onClick={() => setOpen(false)}>Resources</Link>
+          <Link href="/request-a-quote" onClick={() => setOpen(false)}>Contact</Link>
           <a href="mailto:ida@asiaweigh.com">ida@asiaweigh.com</a>
         </nav>
       ) : null}
