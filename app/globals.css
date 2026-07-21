@@ -2204,13 +2204,32 @@ h2 {
 }
 
 .quote-form {
-  margin-top: 25px;
+  margin-top: 0;
+}
+
+.quote-form-head {
+  margin-bottom: 14px;
+}
+
+.quote-form-head strong {
+  display: block;
+  color: white;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.quote-form-head span {
+  display: block;
+  margin-top: 6px;
+  color: #a9bfd0;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 9px 15px;
 }
 
 .quote-form label {
@@ -2219,11 +2238,11 @@ h2 {
 
 .quote-form label > span {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 7px;
   color: #b9cad8;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -2231,23 +2250,30 @@ h2 {
 .quote-form select,
 .quote-form textarea {
   width: 100%;
-  border: 1px solid #385064;
-  border-radius: 0;
+  border: 1px solid rgba(137, 173, 201, 0.32);
+  border-radius: 8px;
   outline: 0;
-  background: #132d45;
+  background: rgba(18, 45, 69, 0.92);
   color: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .quote-form input,
 .quote-form select {
-  height: 47px;
-  padding: 0 13px;
+  height: 41px;
+  padding: 0 14px;
 }
 
 .quote-form textarea {
-  margin-top: 14px;
-  padding: 12px 13px;
+  margin-top: 9px;
+  padding: 12px 14px;
+  min-height: 82px;
   resize: vertical;
+}
+
+.quote-form input::placeholder,
+.quote-form textarea::placeholder {
+  color: #8da5b8;
 }
 
 .quote-form textarea::placeholder {
@@ -2259,17 +2285,47 @@ h2 {
 .quote-form textarea:focus {
   border-color: #8bc5ee;
   box-shadow: 0 0 0 2px rgba(139, 197, 238, 0.18);
+  background: #153753;
+}
+
+.requirement-helper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 2px;
+}
+
+.requirement-helper button {
+  border: 1px solid rgba(139, 197, 238, 0.28);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(139, 197, 238, 0.1);
+  color: #cfe9fb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.requirement-helper button:hover,
+.requirement-helper button:focus-visible {
+  border-color: rgba(139, 197, 238, 0.72);
+  background: rgba(139, 197, 238, 0.2);
+  color: white;
 }
 
 .form-submit {
   width: 100%;
   margin-top: 15px;
+  min-height: 50px;
+  border-radius: 8px;
+  font-size: 15px;
 }
 
 .form-note {
-  margin: 11px 0 0;
-  color: #8298a9;
-  font-size: 11px;
+  margin: 13px 0 0;
+  color: #9eb4c5;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -6599,18 +6655,22 @@ h2 {
 }
 
 .quote-page {
-  padding: 90px 24px;
+  padding: 28px 24px 70px;
   background:
-    linear-gradient(115deg, rgba(5, 30, 56, 0.98), rgba(7, 54, 91, 0.88)),
+    radial-gradient(circle at 72% 10%, rgba(23, 121, 190, 0.32), transparent 34%),
+    linear-gradient(115deg, rgba(5, 30, 56, 0.98), rgba(7, 54, 91, 0.9)),
     url("/hero-welding-banner.png") center / cover;
 }
 
 .quote-page-inner {
-  width: min(1120px, 100%);
+  width: min(1160px, 100%);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.28);
+  grid-template-columns: 0.92fr 1.08fr;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.3);
 }
 
 .quote-map-card {
@@ -6619,7 +6679,7 @@ h2 {
 }
 
 .quote-page-intro {
-  padding: 62px 50px;
+  padding: 48px 50px;
   background: white;
 }
 
@@ -6632,23 +6692,46 @@ h2 {
 }
 
 .quote-page-intro h1 {
-  margin: 18px 0 22px;
+  margin: 18px 0 20px;
   color: var(--navy);
-  font-size: 48px;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+  font-size: 44px;
+  letter-spacing: 0;
+  line-height: 1.08;
 }
 
 .quote-page-intro > span {
+  display: block;
   color: var(--muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.quote-promise-list {
+  margin-top: 28px;
+  display: grid;
+  gap: 11px;
+}
+
+.quote-promise-list span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #173856;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.quote-promise-list svg {
+  flex: 0 0 auto;
+  color: var(--blue);
 }
 
 .quote-contact-list {
-  margin-top: 45px;
+  margin-top: 34px;
 }
 
 .quote-contact-list > * {
-  padding: 16px 0;
+  padding: 14px 0;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -6669,8 +6752,9 @@ h2 {
 }
 
 .quote-page-form {
-  padding: 62px;
-  background: var(--navy);
+  padding: 32px 58px;
+  background:
+    linear-gradient(160deg, rgba(17, 45, 70, 0.98), rgba(8, 31, 52, 0.98));
 }
 
 @media (max-width: 1100px) {

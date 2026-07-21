@@ -16,3 +16,6 @@ tsconfig.tsbuildinfo
 exports/
 data/inquiries.json
 .env*.local
+
+.vercel
+.env*

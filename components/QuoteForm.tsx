@@ -7,6 +7,22 @@ export function QuoteForm() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const [requirement, setRequirement] = useState("");
+
+  const templates = [
+    {
+      label: "Truck scale",
+      text: "Truck scale: capacity __ tons, platform size __ m, installation above ground / pit mounted.",
+    },
+    {
+      label: "Floor scale",
+      text: "Floor scale: capacity __ kg, platform size __, material carbon steel / stainless steel.",
+    },
+    {
+      label: "Bench scale",
+      text: "Bench scale: capacity __ kg, division __ g, used for packing / counting / checking.",
+    },
+  ];
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,6 +42,7 @@ export function QuoteForm() {
         throw new Error(data.error || "Submission failed.");
       }
       form.reset();
+      setRequirement("");
       setSent(true);
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Submission failed. Please email ida@asiaweigh.com.");
@@ -51,48 +68,68 @@ export function QuoteForm() {
 
   return (
     <form className="quote-form" onSubmit={submit}>
+      <div className="quote-form-head">
+        <strong>Free project quote</strong>
+        <span>Fill in the basics. We will help complete the technical selection.</span>
+      </div>
       <div className="form-grid">
         <label>
           <span>Name *</span>
-          <input name="name" autoComplete="name" required />
+          <input name="name" autoComplete="name" placeholder="Your name" required />
         </label>
         <label>
           <span>Business email *</span>
-          <input name="email" type="email" autoComplete="email" required />
+          <input name="email" type="email" autoComplete="email" placeholder="name@company.com" required />
         </label>
         <label>
           <span>WhatsApp</span>
-          <input name="whatsapp" type="tel" autoComplete="tel" />
+          <input name="whatsapp" type="tel" autoComplete="tel" placeholder="+ country code and number" />
         </label>
         <label>
           <span>Country *</span>
-          <input name="country" autoComplete="country-name" required />
+          <input name="country" autoComplete="country-name" placeholder="Destination country" required />
         </label>
         <label>
           <span>Product</span>
           <select name="product" defaultValue="">
             <option value="" disabled>
-              Select a product
+              Choose product type
             </option>
+            <option>Truck scale / weighbridge</option>
+            <option>Floor scale / platform scale</option>
             <option>Bench scale</option>
-            <option>Floor scale</option>
-            <option>Mobile or U-shape scale</option>
-            <option>Animal or special scale</option>
+            <option>Axle scale</option>
+            <option>Crane scale</option>
+            <option>Indicator / load cell / accessories</option>
+            <option>Balance / test weights</option>
             <option>Custom weighing system</option>
             <option>Other</option>
           </select>
         </label>
         <label>
           <span>Required quantity</span>
-          <input name="quantity" inputMode="numeric" />
+          <input name="quantity" inputMode="numeric" placeholder="1 set, 5 pcs..." />
         </label>
       </div>
       <label>
         <span>Product requirement *</span>
+        <div className="requirement-helper">
+          {templates.map((template) => (
+            <button
+              key={template.label}
+              type="button"
+              onClick={() => setRequirement(template.text)}
+            >
+              {template.label}
+            </button>
+          ))}
+        </div>
         <textarea
           name="requirement"
           rows={4}
-          placeholder="Application, capacity, platform size, material and other requirements"
+          placeholder="Example: I need a 60 ton truck scale, 3 x 16 m platform, export to Indonesia, above-ground installation."
+          value={requirement}
+          onChange={(event) => setRequirement(event.target.value)}
           required
         />
       </label>
@@ -101,7 +138,7 @@ export function QuoteForm() {
         {sending ? "Sending..." : "Submit Request"}
       </button>
       <p className="form-note">
-        Your information is used only to prepare your quotation.
+        Your information is only used to prepare the quotation. No spam.
       </p>
     </form>
   );
