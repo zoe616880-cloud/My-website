@@ -373,7 +373,7 @@ textarea {
 
 .mega-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% - 1px);
   left: 50%;
   z-index: 50;
   width: min(410px, calc(100vw - 48px));
@@ -396,7 +396,12 @@ textarea {
 }
 
 .mega-menu::before {
-  content: none;
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 18px;
 }
 
 .mega-intro {

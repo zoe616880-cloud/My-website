@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   ArrowRight,
@@ -20,6 +20,7 @@ export function Header() {
   const [activeMenu, setActiveMenu] = useState<MegaMenuKey | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [routeSettled, setRouteSettled] = useState(false);
+  const closeMenuTimer = useRef<number | null>(null);
   const pathname = usePathname();
   const menu = activeMenu ? megaMenus[activeMenu] : null;
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
@@ -29,6 +30,26 @@ export function Header() {
   const headerStyle = isHome
     ? ({ "--header-progress": scrollProgress } as CSSProperties)
     : undefined;
+
+  function cancelMenuClose() {
+    if (closeMenuTimer.current) {
+      window.clearTimeout(closeMenuTimer.current);
+      closeMenuTimer.current = null;
+    }
+  }
+
+  function openMegaMenu(key: MegaMenuKey) {
+    cancelMenuClose();
+    setActiveMenu(key);
+  }
+
+  function scheduleMenuClose() {
+    cancelMenuClose();
+    closeMenuTimer.current = window.setTimeout(() => {
+      setActiveMenu(null);
+      closeMenuTimer.current = null;
+    }, 180);
+  }
 
   useEffect(() => {
     setRouteSettled(false);
@@ -57,13 +78,18 @@ export function Header() {
     return () => window.removeEventListener("scroll", updateProgress);
   }, [isHome]);
 
+  useEffect(() => {
+    return () => cancelMenuClose();
+  }, []);
+
   if (isAdmin) return null;
 
   return (
     <header
       className={`site-header${isHome ? " site-header-home" : ""}${scrolled ? " site-header-scrolled" : ""}${routeSettled ? " site-header-route-settled" : " site-header-route-transition"}`}
       style={headerStyle}
-      onMouseLeave={() => setActiveMenu(null)}
+      onMouseLeave={scheduleMenuClose}
+      onMouseEnter={cancelMenuClose}
     >
       <div className="header-inner">
         <Link className="brand" href="/" aria-label="Asia Weighing home" style={{ display: 'block', width: '176px', height: '48px' }}>
@@ -99,8 +125,8 @@ export function Header() {
                 href={key === "products" ? "/products" : "/news"}
                 aria-expanded={activeMenu === key}
                 aria-controls="desktop-mega-menu"
-                onFocus={() => setActiveMenu(key)}
-                onMouseEnter={() => setActiveMenu(key)}
+                onFocus={() => openMegaMenu(key)}
+                onMouseEnter={() => openMegaMenu(key)}
                 onClick={() => setActiveMenu(null)}
               >
                 {megaMenus[key].label}
@@ -115,7 +141,8 @@ export function Header() {
             <div
               className={`mega-menu mega-menu-${activeMenu}`}
               id="desktop-mega-menu"
-              onMouseEnter={() => setActiveMenu(activeMenu)}
+              onMouseEnter={cancelMenuClose}
+              onMouseLeave={scheduleMenuClose}
             >
               <div className="mega-links">
                 {menu.items.map(({ icon: Icon, title, copy, href }) => (
