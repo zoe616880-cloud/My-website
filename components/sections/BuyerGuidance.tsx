@@ -7,6 +7,7 @@ import { homePartClass, homePartStyle } from "@/lib/home-parts";
 export function BuyerGuidance({ config }: { config?: HomeSectionConfig }) {
   const featured = blogPosts[0];
   const secondaryPosts = blogPosts.slice(1, 3);
+  const featuredImage = config?.image || config?.images?.[0] || "/factory-modern.png";
 
   return (
     <section className={`section resource-section news-layout-${config?.layout || "split"} home-bg-${config?.background || "white"} home-spacing-${config?.spacing || "standard"}`} id="resources">
@@ -24,7 +25,7 @@ export function BuyerGuidance({ config }: { config?: HomeSectionConfig }) {
         <div className={homePartClass(config, "news-list", "resource-layout")} style={homePartStyle(config, "news-list")}>
           <article className={homePartClass(config, "featured-news", "resource-featured-card")} style={homePartStyle(config, "featured-news")}>
             <Link href={`/news/${featured.slug}`} className={homePartClass(config, "featured-news-image", "resource-featured-image")} style={homePartStyle(config, "featured-news-image")}>
-              <img src="/factory-modern.png" alt={featured.title} />
+              <img src={featuredImage} alt={featured.title} />
             </Link>
             <div className="resource-featured-copy">
               <span>{featured.category}</span>

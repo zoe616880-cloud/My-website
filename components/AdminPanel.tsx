@@ -1,17 +1,19 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { BlogPost } from "@/data/blog-posts";
-import type { HomePageConfig, HomePartConfig, HomeSectionConfig } from "@/data/home-page";
+import type { HomePageConfig, HomeSectionConfig } from "@/data/home-page";
 import type { Product } from "@/data/products";
 
 type AdminTab = "products" | "blogs" | "home";
+type NoticeTone = "info" | "success" | "error";
 
 const emptyProduct: Product = {
   slug: "",
   name: "",
   shortName: "",
   category: "",
+  subcategory: "",
   description: "",
   longDescription: "",
   image: "",
@@ -51,207 +53,67 @@ const emptyBlog: BlogPost = {
   imagePlans: [],
 };
 
+const emptyHomePage: HomePageConfig = { sections: [] };
+
 const sectionNames: Record<HomeSectionConfig["id"], string> = {
-  hero: "Banner 首屏",
+  hero: "首页首屏",
   applications: "应用场景",
   products: "产品展示",
-  advantages: "我们的优势",
+  advantages: "核心优势",
   factory: "工厂制造",
   news: "新闻概览",
-  partners: "合作商",
+  partners: "合作伙伴",
 };
 
 const layoutOptions = ["default", "grid", "portfolio", "cards", "split", "list", "marquee"] as const;
 const backgroundOptions = ["image", "white", "soft", "dark"] as const;
 const spacingOptions = ["compact", "standard", "wide"] as const;
 
-const layoutOptionLabels: Record<(typeof layoutOptions)[number], string> = {
+const layoutLabels: Record<(typeof layoutOptions)[number], string> = {
   default: "默认布局",
-  grid: "宫格排列",
+  grid: "网格布局",
   portfolio: "画册布局",
   cards: "卡片布局",
-  split: "左右结构",
+  split: "左右分栏",
   list: "列表布局",
   marquee: "横向滚动",
 };
 
-const backgroundOptionLabels: Record<(typeof backgroundOptions)[number], string> = {
+const backgroundLabels: Record<(typeof backgroundOptions)[number], string> = {
   image: "图片背景",
   white: "白色背景",
   soft: "浅色背景",
   dark: "深色背景",
 };
 
-const spacingOptionLabels: Record<(typeof spacingOptions)[number], string> = {
+const spacingLabels: Record<(typeof spacingOptions)[number], string> = {
   compact: "紧凑",
   standard: "标准",
   wide: "宽松",
 };
 
-const emptyHomePage: HomePageConfig = { sections: [] };
-
-const sectionPartDefaults: Record<HomeSectionConfig["id"], Array<Pick<HomePartConfig, "id" | "label">>> = {
-  hero: [
-    { id: "eyebrow", label: "小标题" },
-    { id: "title", label: "主标题" },
-    { id: "copy", label: "说明文字" },
-    { id: "buttons", label: "按钮组" },
-    { id: "primary-button", label: "主按钮" },
-    { id: "secondary-button", label: "副按钮" },
-    { id: "proof", label: "底部卖点" },
-    { id: "proof-1", label: "卖点1" },
-    { id: "proof-2", label: "卖点2" },
-    { id: "proof-3", label: "卖点3" },
-  ],
-  applications: [
-    { id: "heading", label: "标题区" },
-    { id: "cards", label: "全部应用卡片" },
-    { id: "app-1-card", label: "应用1卡片" },
-    { id: "app-1-image", label: "应用1图片" },
-    { id: "app-1-icon", label: "应用1图标" },
-    { id: "app-1-title", label: "应用1标题" },
-    { id: "app-1-copy", label: "应用1描述" },
-    { id: "app-1-link", label: "应用1链接" },
-    { id: "app-2-card", label: "应用2卡片" },
-    { id: "app-2-image", label: "应用2图片" },
-    { id: "app-2-icon", label: "应用2图标" },
-    { id: "app-2-title", label: "应用2标题" },
-    { id: "app-2-copy", label: "应用2描述" },
-    { id: "app-2-link", label: "应用2链接" },
-    { id: "app-3-card", label: "应用3卡片" },
-    { id: "app-3-image", label: "应用3图片" },
-    { id: "app-3-icon", label: "应用3图标" },
-    { id: "app-3-title", label: "应用3标题" },
-    { id: "app-3-copy", label: "应用3描述" },
-    { id: "app-3-link", label: "应用3链接" },
-    { id: "app-4-card", label: "应用4卡片" },
-    { id: "app-4-image", label: "应用4图片" },
-    { id: "app-4-icon", label: "应用4图标" },
-    { id: "app-4-title", label: "应用4标题" },
-    { id: "app-4-copy", label: "应用4描述" },
-    { id: "app-4-link", label: "应用4链接" },
-  ],
-  products: [
-    { id: "intro", label: "标题区" },
-    { id: "product-1", label: "产品1卡片" },
-    { id: "product-1-image", label: "产品1图片" },
-    { id: "product-1-label", label: "产品1名称" },
-    { id: "product-2", label: "产品2卡片" },
-    { id: "product-2-image", label: "产品2图片" },
-    { id: "product-2-label", label: "产品2名称" },
-    { id: "product-3", label: "产品3卡片" },
-    { id: "product-3-image", label: "产品3图片" },
-    { id: "product-3-label", label: "产品3名称" },
-    { id: "product-4", label: "产品4卡片" },
-    { id: "product-4-image", label: "产品4图片" },
-    { id: "product-4-label", label: "产品4名称" },
-    { id: "button", label: "查看全部按钮" },
-  ],
-  advantages: [
-    { id: "copy-block", label: "左侧文案" },
-    { id: "cards", label: "全部优势卡片" },
-    { id: "advantage-1-card", label: "优势1卡片" },
-    { id: "advantage-1-icon", label: "优势1图标" },
-    { id: "advantage-1-title", label: "优势1标题" },
-    { id: "advantage-1-copy", label: "优势1描述" },
-    { id: "advantage-2-card", label: "优势2卡片" },
-    { id: "advantage-2-icon", label: "优势2图标" },
-    { id: "advantage-2-title", label: "优势2标题" },
-    { id: "advantage-2-copy", label: "优势2描述" },
-    { id: "advantage-3-card", label: "优势3卡片" },
-    { id: "advantage-3-icon", label: "优势3图标" },
-    { id: "advantage-3-title", label: "优势3标题" },
-    { id: "advantage-3-copy", label: "优势3描述" },
-    { id: "advantage-4-card", label: "优势4卡片" },
-    { id: "advantage-4-icon", label: "优势4图标" },
-    { id: "advantage-4-title", label: "优势4标题" },
-    { id: "advantage-4-copy", label: "优势4描述" },
-  ],
-  factory: [
-    { id: "image", label: "工厂图片" },
-    { id: "copy-block", label: "右侧文案" },
-    { id: "points", label: "要点列表" },
-    { id: "factory-point-1", label: "工厂要点1" },
-    { id: "factory-point-2", label: "工厂要点2" },
-    { id: "factory-point-3", label: "工厂要点3" },
-  ],
-  news: [
-    { id: "heading", label: "新闻标题" },
-    { id: "featured-news", label: "主新闻卡片" },
-    { id: "featured-news-image", label: "主新闻图片" },
-    { id: "featured-news-title", label: "主新闻标题" },
-    { id: "featured-news-copy", label: "主新闻描述" },
-    { id: "featured-news-link", label: "主新闻链接" },
-    { id: "side-news", label: "右侧新闻列表" },
-    { id: "side-news-1", label: "右侧新闻1" },
-    { id: "side-news-2", label: "右侧新闻2" },
-  ],
-  partners: [
-    { id: "heading", label: "合作商标题" },
-    { id: "logos", label: "Logo 轮播" },
-    { id: "partner-1-logo", label: "Logo 1" },
-    { id: "partner-2-logo", label: "Logo 2" },
-    { id: "partner-3-logo", label: "Logo 3" },
-    { id: "partner-4-logo", label: "Logo 4" },
-    { id: "partner-5-logo", label: "Logo 5" },
-    { id: "partner-6-logo", label: "Logo 6" },
-    { id: "partner-7-logo", label: "Logo 7" },
-    { id: "partner-8-logo", label: "Logo 8" },
-  ],
-};
-
-function createHomePart(id: string, label: string, index: number): HomePartConfig {
-  return {
-    id,
-    label,
-    enabled: true,
-    x: 0,
-    y: 0,
-    width: 100,
-    height: 0,
-    scale: 100,
-    z: index + 1,
-    opacity: 100,
-    align: "left",
-  };
-}
-
-function ensureSectionParts(section: HomeSectionConfig): HomeSectionConfig {
-  const savedParts = section.parts || [];
-  const defaults = sectionPartDefaults[section.id] || [];
-  const parts = defaults.map((part, index) => ({
-    ...createHomePart(part.id, part.label, index),
-    ...savedParts.find((savedPart) => savedPart.id === part.id),
-    label: part.label,
-  }));
-
-  return { ...section, parts };
-}
-
-function normalizeHomePage(homePage: HomePageConfig): HomePageConfig {
-  return { sections: homePage.sections.map(ensureSectionParts) };
-}
-
 function linesToArray(value: string) {
   return value.split("\n").map((item) => item.trim()).filter(Boolean);
 }
 
-function arrayToLines(value: string[]) {
+function arrayToLines(value: string[] = []) {
   return value.join("\n");
 }
 
-function specsToText(value: Array<[string, string]>) {
+function specsToText(value: Array<[string, string]> = []) {
   return value.map(([label, detail]) => `${label} | ${detail}`).join("\n");
 }
 
 function textToSpecs(value: string): Array<[string, string]> {
-  return linesToArray(value).map((line) => {
-    const [label, ...rest] = line.split("|");
-    return [label.trim(), rest.join("|").trim()] as [string, string];
-  }).filter(([label, detail]) => label && detail);
+  return linesToArray(value)
+    .map((line) => {
+      const [label, ...rest] = line.split("|");
+      return [label.trim(), rest.join("|").trim()] as [string, string];
+    })
+    .filter(([label, detail]) => label && detail);
 }
 
-function paragraphsToText(value: string[]) {
+function paragraphsToText(value: string[] = []) {
   return value.join("\n\n");
 }
 
@@ -259,15 +121,146 @@ function textToParagraphs(value: string) {
   return value.split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean);
 }
 
-function faqsToText(value: { question: string; answer: string }[]) {
+function faqsToText(value: { question: string; answer: string }[] = []) {
   return value.map((item) => `${item.question} | ${item.answer}`).join("\n");
 }
 
 function textToFaqs(value: string) {
-  return linesToArray(value).map((line) => {
-    const [question, ...rest] = line.split("|");
-    return { question: question.trim(), answer: rest.join("|").trim() };
-  }).filter((item) => item.question && item.answer);
+  return linesToArray(value)
+    .map((line) => {
+      const [question, ...rest] = line.split("|");
+      return { question: question.trim(), answer: rest.join("|").trim() };
+    })
+    .filter((item) => item.question && item.answer);
+}
+
+function makeNotice(message: string, tone: NoticeTone = "info") {
+  return { message, tone };
+}
+
+function imagesToText(value: string[] = []) {
+  return value.join("\n");
+}
+
+function slugify(value: string) {
+  const slug = value
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || `product-${Date.now()}`;
+}
+
+function splitMultiValue(value: unknown) {
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean);
+  if (typeof value !== "string") return [];
+  return value.split(/\r?\n|;/).map((item) => item.trim()).filter(Boolean);
+}
+
+function parseSpecsValue(value: unknown): Array<[string, string]> {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (Array.isArray(item)) return [String(item[0] || "").trim(), String(item[1] || "").trim()] as [string, string];
+        if (item && typeof item === "object") {
+          const record = item as Record<string, unknown>;
+          return [String(record.label || record.name || "").trim(), String(record.detail || record.value || "").trim()] as [string, string];
+        }
+        return ["", ""] as [string, string];
+      })
+      .filter(([label, detail]) => label && detail);
+  }
+  return splitMultiValue(value)
+    .map((item) => {
+      const separator = item.includes("|") ? "|" : ":";
+      const [label, ...rest] = item.split(separator);
+      return [label.trim(), rest.join(separator).trim()] as [string, string];
+    })
+    .filter(([label, detail]) => label && detail);
+}
+
+function parseCsvRows(text: string) {
+  const rows: string[][] = [];
+  let cell = "";
+  let row: string[] = [];
+  let quoted = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+    if (char === '"' && quoted && next === '"') {
+      cell += '"';
+      index += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === "," && !quoted) {
+      row.push(cell.trim());
+      cell = "";
+    } else if ((char === "\n" || char === "\r") && !quoted) {
+      if (char === "\r" && next === "\n") index += 1;
+      row.push(cell.trim());
+      if (row.some(Boolean)) rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += char;
+    }
+  }
+
+  row.push(cell.trim());
+  if (row.some(Boolean)) rows.push(row);
+  const [headers = [], ...body] = rows;
+  return body.map((cells) =>
+    headers.reduce<Record<string, string>>((record, header, index) => {
+      record[header.trim()] = cells[index]?.trim() || "";
+      return record;
+    }, {}),
+  );
+}
+
+function field(record: Record<string, unknown>, keys: string[]) {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
+    if (typeof value === "number") return String(value);
+  }
+  return "";
+}
+
+function normalizeImportedProduct(raw: Record<string, unknown>, index: number): Product {
+  const name = field(raw, ["name", "产品名称", "title"]) || `Imported Product ${index + 1}`;
+  const shortName = field(raw, ["shortName", "short_name", "短名称"]) || name;
+  const slug = field(raw, ["slug", "URL Slug", "链接名"]) || slugify(name);
+  return {
+    ...emptyProduct,
+    slug,
+    name,
+    shortName,
+    category: field(raw, ["category", "主分类", "parentCategory"]),
+    subcategory: field(raw, ["subcategory", "子分类", "childCategory"]),
+    description: field(raw, ["description", "简短描述", "summary"]),
+    longDescription: field(raw, ["longDescription", "详细描述", "content"]),
+    image: field(raw, ["image", "图片", "主图"]),
+    capacities: field(raw, ["capacities", "容量范围", "capacity"]),
+    materials: field(raw, ["materials", "材质", "material"]),
+    applications: splitMultiValue(raw.applications || raw["应用场景"]),
+    features: splitMultiValue(raw.features || raw["产品特点"]),
+    specifications: parseSpecsValue(raw.specifications || raw["规格参数"]),
+    customization: splitMultiValue(raw.customization || raw["可定制项"]),
+  };
+}
+
+function parseProductImport(text: string, fileName: string) {
+  let source: unknown;
+  if (fileName.toLowerCase().endsWith(".csv")) {
+    source = parseCsvRows(text);
+  } else {
+    const parsed = JSON.parse(text);
+    source = Array.isArray(parsed) ? parsed : parsed.products;
+  }
+  if (!Array.isArray(source)) throw new Error("文件里没有找到产品列表。");
+  return source.map((item, index) => normalizeImportedProduct(item as Record<string, unknown>, index));
 }
 
 export function AdminPanel() {
@@ -279,15 +272,59 @@ export function AdminPanel() {
   const [selectedProduct, setSelectedProduct] = useState(0);
   const [selectedBlog, setSelectedBlog] = useState(0);
   const [selectedHomeSection, setSelectedHomeSection] = useState(0);
-  const [selectedHomePart, setSelectedHomePart] = useState(0);
   const [productDraft, setProductDraft] = useState<Product>(emptyProduct);
   const [blogDraft, setBlogDraft] = useState<BlogPost>(emptyBlog);
   const [homeDraft, setHomeDraft] = useState<HomeSectionConfig | null>(null);
-  const [homePreviewKey, setHomePreviewKey] = useState(0);
-  const [homePreviewMode, setHomePreviewMode] = useState<"desktop" | "mobile">("desktop");
-  const homePreviewRef = useRef<HTMLIFrameElement | null>(null);
-  const [status, setStatus] = useState("请输入后台密码，然后加载内容。");
+  const [productQuery, setProductQuery] = useState("");
+  const [blogQuery, setBlogQuery] = useState("");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("all");
+  const [notice, setNotice] = useState(makeNotice("请输入后台密码，然后加载内容。"));
   const [loading, setLoading] = useState(false);
+  const contentLoaded = products.length > 0 || blogs.length > 0 || homePage.sections.length > 0;
+
+  const filteredProducts = useMemo(() => {
+    const query = productQuery.trim().toLowerCase();
+    return products
+      .map((product, index) => ({ product, index }))
+      .filter(({ product }) => !query || [product.name, product.slug, product.category, product.subcategory || ""].join(" ").toLowerCase().includes(query));
+  }, [productQuery, products]);
+
+  const visibleProductEntries = useMemo(() => {
+    if (selectedCategoryFilter === "all") return filteredProducts;
+    const [category, subcategory = ""] = selectedCategoryFilter.split("||");
+    return filteredProducts.filter(({ product }) => product.category === category && (!subcategory || product.subcategory === subcategory));
+  }, [filteredProducts, selectedCategoryFilter]);
+
+  const filteredBlogs = useMemo(() => {
+    const query = blogQuery.trim().toLowerCase();
+    return blogs
+      .map((blog, index) => ({ blog, index }))
+      .filter(({ blog }) => !query || [blog.title, blog.slug, blog.category, blog.targetKeyword].join(" ").toLowerCase().includes(query));
+  }, [blogQuery, blogs]);
+
+  const orderedHomeSections = useMemo(
+    () => homePage.sections.map((section, index) => ({ section, index })).sort((a, b) => a.section.order - b.section.order),
+    [homePage.sections],
+  );
+  const categoryTree = useMemo(() => {
+    const tree = new Map<string, { count: number; subcategories: Map<string, number> }>();
+    products.forEach((product) => {
+      const category = product.category || "未分类";
+      if (!tree.has(category)) tree.set(category, { count: 0, subcategories: new Map() });
+      const item = tree.get(category);
+      if (!item) return;
+      item.count += 1;
+      if (product.subcategory) item.subcategories.set(product.subcategory, (item.subcategories.get(product.subcategory) || 0) + 1);
+    });
+    return Array.from(tree, ([category, item]) => ({
+      category,
+      count: item.count,
+      subcategories: Array.from(item.subcategories, ([name, count]) => ({ name, count })),
+    }));
+  }, [products]);
+
+  const activeTitle = activeTab === "products" ? "产品管理" : activeTab === "blogs" ? "Blog / News 管理" : "Home 页面管理";
+  const blogBody = paragraphsToText(blogDraft.sections[0]?.paragraphs || []);
 
   async function adminFetch(url: string, options: RequestInit = {}) {
     return fetch(url, {
@@ -300,146 +337,60 @@ export function AdminPanel() {
     });
   }
 
+  async function readJson(response: Response) {
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.error) {
+      throw new Error(data.error || `请求失败：${response.status}`);
+    }
+    return data;
+  }
+
   async function loadContent() {
     if (!password.trim()) {
-      setStatus("请先输入后台密码。");
+      setNotice(makeNotice("请先输入后台密码。", "error"));
       return;
     }
-
     setLoading(true);
-    setStatus("正在加载内容...");
-
+    setNotice(makeNotice("正在加载产品、文章和首页配置..."));
     try {
-      const [productsResponse, blogsResponse, homeResponse] = await Promise.all([
-        adminFetch("/api/admin/products"),
-        adminFetch("/api/admin/blogs"),
-        adminFetch("/api/admin/home"),
+      const [productsData, blogsData, homeData] = await Promise.all([
+        adminFetch("/api/admin/products").then(readJson),
+        adminFetch("/api/admin/blogs").then(readJson),
+        adminFetch("/api/admin/home").then(readJson),
       ]);
-      const productsData = await productsResponse.json();
-      const blogsData = await blogsResponse.json();
-      const homeData = await homeResponse.json();
-
-      if (productsData.error || blogsData.error || homeData.error) {
-        setStatus("密码不正确，请检查后重试。");
-        return;
-      }
-
-      setProducts(productsData.products);
-      setBlogs(blogsData.blogPosts);
-      const normalizedHomePage = normalizeHomePage(homeData.homePage);
-      setHomePage(normalizedHomePage);
+      setProducts(productsData.products || []);
+      setBlogs(blogsData.blogPosts || []);
+      setHomePage(homeData.homePage || emptyHomePage);
       setSelectedProduct(0);
       setSelectedBlog(0);
       setSelectedHomeSection(0);
-      setSelectedHomePart(0);
-      setProductDraft(productsData.products[0] || emptyProduct);
-      setBlogDraft(blogsData.blogPosts[0] || emptyBlog);
-      setHomeDraft(normalizedHomePage.sections[0] || null);
-      setStatus("内容已加载。现在可以像表单一样编辑，完成后点击保存。");
+      setProductDraft(productsData.products?.[0] || emptyProduct);
+      setBlogDraft(blogsData.blogPosts?.[0] || emptyBlog);
+      setHomeDraft(homeData.homePage?.sections?.[0] || null);
+      setNotice(makeNotice("内容已加载。选择条目后编辑，保存后前台会同步更新。", "success"));
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "内容加载失败。");
+      setNotice(makeNotice(error instanceof Error ? error.message : "内容加载失败。", "error"));
     } finally {
       setLoading(false);
     }
   }
 
-  function chooseProduct(index: number) {
-    setSelectedProduct(index);
-    setProductDraft(products[index] || emptyProduct);
-  }
-
-  function chooseBlog(index: number) {
-    setSelectedBlog(index);
-    setBlogDraft(blogs[index] || emptyBlog);
-  }
-
-  function chooseHomeSection(index: number) {
-    setSelectedHomeSection(index);
-    setHomeDraft(homePage.sections[index] || null);
-    setSelectedHomePart(0);
-  }
-
-  function getHomePageWithDraft(draft = homeDraft) {
-    if (!draft) {
-      return homePage;
+  async function saveContent(type: "products" | "blogs", value: Product[] | BlogPost[]) {
+    setLoading(true);
+    setNotice(makeNotice(type === "products" ? "正在保存产品..." : "正在保存文章..."));
+    try {
+      await adminFetch(`/api/admin/${type}`, {
+        method: "POST",
+        body: JSON.stringify(type === "products" ? { products: value } : { blogPosts: value }),
+      }).then(readJson);
+      if (type === "products") setProducts(value as Product[]);
+      if (type === "blogs") setBlogs(value as BlogPost[]);
+      setNotice(makeNotice(type === "products" ? "产品保存成功。" : "文章保存成功。", "success"));
+    } catch (error) {
+      setNotice(makeNotice(error instanceof Error ? error.message : "保存失败。", "error"));
+    } finally {
+      setLoading(false);
     }
-
-    const nextSections = [...homePage.sections];
-    nextSections[selectedHomeSection] = draft;
-    return { sections: nextSections };
-  }
-
-  function updateHomeDraft(nextDraft: HomeSectionConfig) {
-    const normalizedDraft = ensureSectionParts(nextDraft);
-    setHomeDraft(normalizedDraft);
-    setHomePage(getHomePageWithDraft(normalizedDraft));
-  }
-
-  function updateHomePart(nextPart: HomePartConfig) {
-    if (!homeDraft) {
-      return;
-    }
-
-    const parts = [...(homeDraft.parts || [])];
-    parts[selectedHomePart] = nextPart;
-    updateHomeDraft({ ...homeDraft, parts });
-  }
-
-  function moveHomeSection(direction: -1 | 1) {
-    const currentHomePage = getHomePageWithDraft();
-    const ordered = currentHomePage.sections
-      .map((section, index) => ({ section, index }))
-      .sort((a, b) => a.section.order - b.section.order);
-    const currentPosition = ordered.findIndex((item) => item.index === selectedHomeSection);
-    const targetPosition = currentPosition + direction;
-
-    if (currentPosition < 0 || targetPosition < 0 || targetPosition >= ordered.length) {
-      return;
-    }
-
-    const nextOrdered = [...ordered];
-    [nextOrdered[currentPosition], nextOrdered[targetPosition]] = [nextOrdered[targetPosition], nextOrdered[currentPosition]];
-    const nextSections = nextOrdered.map((item, index) => ({ ...item.section, order: index + 1 }));
-
-    setHomePage({ sections: nextSections });
-    setSelectedHomeSection(targetPosition);
-    setHomeDraft(nextSections[targetPosition]);
-    setSelectedHomePart(0);
-  }
-
-  function addProduct() {
-    const next = { ...emptyProduct, slug: "new-product", name: "New Product", shortName: "New Product" };
-    setProducts([...products, next]);
-    setSelectedProduct(products.length);
-    setProductDraft(next);
-  }
-
-  function addBlog() {
-    const next = { ...emptyBlog, slug: "new-blog-post", title: "New Blog Post", h1: "New Blog Post", seoTitle: "New Blog Post" };
-    setBlogs([...blogs, next]);
-    setSelectedBlog(blogs.length);
-    setBlogDraft(next);
-  }
-
-  async function uploadImage(file: File, target: "product" | "blog") {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("target", target);
-
-    setStatus("正在上传图片...");
-    const response = await adminFetch("/api/admin/upload", { method: "POST", body: formData });
-    const data = await response.json();
-
-    if (data.error) {
-      setStatus(data.error);
-      return;
-    }
-
-    if (target === "product") {
-      setProductDraft({ ...productDraft, image: data.path });
-    }
-
-    setStatus(`图片已上传：${data.path}`);
   }
 
   async function saveProducts() {
@@ -456,428 +407,266 @@ export function AdminPanel() {
 
   async function saveHome() {
     if (!homeDraft) {
-      setStatus("请先选择一个 Home 板块。");
+      setNotice(makeNotice("请先选择一个首页板块。", "error"));
       return;
     }
-
-    const nextHomePage = getHomePageWithDraft();
-
+    const nextSections = [...homePage.sections];
+    nextSections[selectedHomeSection] = homeDraft;
+    const nextHomePage = { sections: nextSections };
     setLoading(true);
-    setStatus("正在保存 Home 页面配置...");
-
+    setNotice(makeNotice("正在保存 Home 页面配置..."));
     try {
-      const response = await adminFetch("/api/admin/home", {
-        method: "POST",
-        body: JSON.stringify({ homePage: nextHomePage }),
-      });
-      const data = await response.json();
-
-      if (data.error) {
-        setStatus(data.error);
-        return;
-      }
-
+      await adminFetch("/api/admin/home", { method: "POST", body: JSON.stringify({ homePage: nextHomePage }) }).then(readJson);
       setHomePage(nextHomePage);
-      setHomePreviewKey((key) => key + 1);
-      setStatus("Home 页面配置已保存。前台首页会按新的顺序、文案和布局渲染。");
+      setNotice(makeNotice("Home 页面配置已保存。", "success"));
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Home 页面配置保存失败。");
+      setNotice(makeNotice(error instanceof Error ? error.message : "Home 页面保存失败。", "error"));
     } finally {
       setLoading(false);
     }
   }
 
-  async function saveContent(type: "products" | "blogs", value: Product[] | BlogPost[]) {
+  async function uploadImage(file: File, target: "product" | "home", onUploaded: (path: string) => void) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("target", target);
     setLoading(true);
-    setStatus(`正在保存${type === "products" ? "产品" : "博客"}...`);
-
+    setNotice(makeNotice("正在上传图片..."));
     try {
-      const response = await adminFetch(`/api/admin/${type}`, {
-        method: "POST",
-        body: JSON.stringify(type === "products" ? { products: value } : { blogPosts: value }),
-      });
-      const data = await response.json();
-
-      if (data.error) {
-        setStatus(data.error);
-        return;
-      }
-
-      if (type === "products") {
-        setProducts(value as Product[]);
-      } else {
-        setBlogs(value as BlogPost[]);
-      }
-
-      setStatus("保存成功。重新构建或重新部署后，前台页面会更新。");
+      const data = await adminFetch("/api/admin/upload", { method: "POST", body: formData }).then(readJson);
+      onUploaded(data.path);
+      setNotice(makeNotice(`图片已上传：${data.path}`, "success"));
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "保存失败。");
+      setNotice(makeNotice(error instanceof Error ? error.message : "图片上传失败。", "error"));
     } finally {
       setLoading(false);
     }
   }
 
-  const blogBody = paragraphsToText(blogDraft.sections[0]?.paragraphs || []);
-  const activeTitle =
-    activeTab === "products"
-      ? "产品上传 / 编辑"
-      : activeTab === "blogs"
-        ? "Blog / News 上传 / 编辑"
-        : "Home 页面布局 / 文案";
-  const contentLoaded = products.length > 0 || blogs.length > 0 || homePage.sections.length > 0;
-  const currentHomePart = homeDraft?.parts?.[selectedHomePart] || null;
-  const homePreviewUrl = `/?adminPreview=${homePreviewKey}`;
-
-  function syncPreviewHighlight() {
-    const previewDocument = homePreviewRef.current?.contentDocument;
-
-    if (!previewDocument) {
+  async function importProductsFile(file: File) {
+    if (!password.trim()) {
+      setNotice(makeNotice("请先登录后台再导入产品。", "error"));
       return;
     }
-
-    previewDocument
-      .querySelectorAll(".home-section-admin-selected")
-      .forEach((element) => element.classList.remove("home-section-admin-selected"));
-    previewDocument
-      .querySelectorAll(".home-part-admin-selected")
-      .forEach((element) => element.classList.remove("home-part-admin-selected"));
-
-    if (!homeDraft) {
-      return;
+    setLoading(true);
+    setNotice(makeNotice("正在读取产品文件..."));
+    try {
+      const imported = parseProductImport(await file.text(), file.name);
+      if (!imported.length) throw new Error("文件里没有可导入的产品。");
+      const next = [...products];
+      imported.forEach((product) => {
+        const existingIndex = next.findIndex((item) => item.slug === product.slug);
+        if (existingIndex >= 0) {
+          next[existingIndex] = product;
+        } else {
+          next.push(product);
+        }
+      });
+      await saveContent("products", next);
+      const firstIndex = next.findIndex((item) => item.slug === imported[0].slug);
+      setSelectedProduct(firstIndex >= 0 ? firstIndex : 0);
+      setProductDraft(next[firstIndex] || next[0] || emptyProduct);
+      setSelectedCategoryFilter("all");
+      setNotice(makeNotice(`已导入并保存 ${imported.length} 个产品。重复链接名会自动更新原产品。`, "success"));
+    } catch (error) {
+      setNotice(makeNotice(error instanceof Error ? error.message : "产品文件导入失败。", "error"));
+    } finally {
+      setLoading(false);
     }
-
-    const sectionElement = previewDocument.querySelector(`[data-home-section="${homeDraft.id}"]`);
-    sectionElement?.classList.add("home-section-admin-selected");
-    sectionElement?.querySelector(`.home-part-${currentHomePart?.id}`)?.classList.add("home-part-admin-selected");
   }
 
-  useEffect(() => {
-    syncPreviewHighlight();
-    const previewDocument = homePreviewRef.current?.contentDocument;
-    const previewWindow = homePreviewRef.current?.contentWindow;
+  function chooseProduct(index: number) {
+    setSelectedProduct(index);
+    setProductDraft(products[index] || emptyProduct);
+  }
 
-    if (!previewDocument || !previewWindow || !homeDraft || !currentHomePart) {
-      return;
-    }
+  function chooseProductFilter(filter: string) {
+    setSelectedCategoryFilter(filter);
+    const [category, subcategory = ""] = filter.split("||");
+    const firstMatchingIndex = filter === "all"
+      ? 0
+      : products.findIndex((product) => product.category === category && (!subcategory || product.subcategory === subcategory));
 
-    const activePart = currentHomePart;
-    const selectedElement = previewDocument.querySelector<HTMLElement>(`.home-part-${activePart.id}`);
+    if (firstMatchingIndex >= 0) chooseProduct(firstMatchingIndex);
+  }
 
-    if (!selectedElement) {
-      return;
-    }
+  function chooseBlog(index: number) {
+    setSelectedBlog(index);
+    setBlogDraft(blogs[index] || emptyBlog);
+  }
 
-    const draggableElement = selectedElement;
-    draggableElement.classList.add("home-part-admin-draggable");
+  function chooseHomeSection(index: number) {
+    setSelectedHomeSection(index);
+    setHomeDraft(homePage.sections[index] || null);
+  }
 
-    function handlePointerDown(event: PointerEvent) {
-      if (event.button !== 0) {
-        return;
-      }
+  function addProduct() {
+    const [category, subcategory = ""] = selectedCategoryFilter === "all" ? ["", ""] : selectedCategoryFilter.split("||");
+    const next = { ...emptyProduct, slug: "new-product", name: "New Product", shortName: "New Product", category, subcategory };
+    setProducts([...products, next]);
+    setSelectedProduct(products.length);
+    setProductDraft(next);
+  }
 
-      event.preventDefault();
-      event.stopPropagation();
+  function deleteProduct() {
+    if (!products.length) return;
+    const next = products.filter((_, index) => index !== selectedProduct);
+    const nextIndex = Math.max(0, selectedProduct - 1);
+    setProducts(next);
+    setSelectedProduct(nextIndex);
+    setProductDraft(next[nextIndex] || emptyProduct);
+    setNotice(makeNotice("产品已从编辑列表移除，点击保存产品后才会写入文件。"));
+  }
 
-      const startX = event.clientX;
-      const startY = event.clientY;
-      const initialX = activePart.x;
-      const initialY = activePart.y;
-      let nextX = initialX;
-      let nextY = initialY;
+  function addBlog() {
+    const next = { ...emptyBlog, slug: "new-blog-post", title: "New Blog Post", h1: "New Blog Post", seoTitle: "New Blog Post" };
+    setBlogs([...blogs, next]);
+    setSelectedBlog(blogs.length);
+    setBlogDraft(next);
+  }
 
-      previewDocument?.body.classList.add("admin-preview-dragging");
+  function deleteBlog() {
+    if (!blogs.length) return;
+    const next = blogs.filter((_, index) => index !== selectedBlog);
+    const nextIndex = Math.max(0, selectedBlog - 1);
+    setBlogs(next);
+    setSelectedBlog(nextIndex);
+    setBlogDraft(next[nextIndex] || emptyBlog);
+    setNotice(makeNotice("文章已从编辑列表移除，点击保存文章后才会写入文件。"));
+  }
 
-      function handlePointerMove(moveEvent: PointerEvent) {
-        nextX = Math.round(initialX + moveEvent.clientX - startX);
-        nextY = Math.round(initialY + moveEvent.clientY - startY);
-        draggableElement.style.transform = `translate(${nextX}px, ${nextY}px) scale(${activePart.scale / 100})`;
-      }
+  function updateHomeDraft(nextDraft: HomeSectionConfig) {
+    setHomeDraft(nextDraft);
+    const nextSections = [...homePage.sections];
+    nextSections[selectedHomeSection] = nextDraft;
+    setHomePage({ sections: nextSections });
+  }
 
-      function handlePointerUp() {
-        previewDocument?.body.classList.remove("admin-preview-dragging");
-        previewWindow?.removeEventListener("pointermove", handlePointerMove);
-        previewWindow?.removeEventListener("pointerup", handlePointerUp);
-        updateHomePart({ ...activePart, x: nextX, y: nextY });
-      }
+  function logout() {
+    setProducts([]);
+    setBlogs([]);
+    setHomePage(emptyHomePage);
+    setSelectedProduct(0);
+    setSelectedBlog(0);
+    setSelectedHomeSection(0);
+    setProductDraft(emptyProduct);
+    setBlogDraft(emptyBlog);
+    setHomeDraft(null);
+    setProductQuery("");
+    setBlogQuery("");
+    setSelectedCategoryFilter("all");
+    setNotice(makeNotice("已退出后台。"));
+  }
 
-      previewWindow?.addEventListener("pointermove", handlePointerMove);
-      previewWindow?.addEventListener("pointerup", handlePointerUp);
-    }
-
-    draggableElement.addEventListener("pointerdown", handlePointerDown);
-
-    return () => {
-      draggableElement.classList.remove("home-part-admin-draggable");
-      draggableElement.removeEventListener("pointerdown", handlePointerDown);
-    };
-  });
+  if (!contentLoaded) {
+    return (
+      <main className="admin-login-page">
+        <section className="admin-login-card">
+          <div className="admin-login-brand">
+            <span>Asia Weighing Admin</span>
+            <h1>网站后台</h1>
+            <p>登录后管理产品、新闻文章和首页内容。</p>
+          </div>
+          <div className="admin-login-form">
+            <label>
+              后台密码
+              <input
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    loadContent();
+                  }
+                }}
+                type="password"
+                placeholder="输入 ADMIN_PASSWORD"
+              />
+            </label>
+            <button type="button" onClick={loadContent} disabled={loading}>
+              {loading ? "正在登录" : "进入后台"}
+            </button>
+          </div>
+          <div className={`admin-login-notice admin-note-${notice.tone}`}>
+            <strong>{notice.tone === "success" ? "完成" : notice.tone === "error" ? "需要处理" : "提示"}</strong>
+            <p>{notice.message}</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
-    <main className={`admin-shell${contentLoaded ? " admin-loaded" : ""}`}>
-      <section className="admin-sidebar">
-        <div className="admin-brand">
-          <span>Asia Weighing</span>
-          <h1>网站后台</h1>
-          {!contentLoaded ? <p>用表单管理产品、新闻和首页排版，不需要编辑代码。</p> : null}
+    <main className="admin-shell admin-loaded">
+      <header className="admin-app-header">
+        <div>
+          <span>Asia Weighing Admin</span>
+          <strong>网站后台</strong>
         </div>
-        <div className="admin-login-controls">
-          <label>
-            后台密码
-            <input
-              type="password"
-              value={password}
-              placeholder="默认：admin123"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </label>
-          <button type="button" onClick={loadContent} disabled={loading || !password}>
-            {contentLoaded ? "重新加载" : "加载内容"}
-          </button>
+        <nav className="admin-app-nav" aria-label="后台模块">
+          <button className={activeTab === "products" ? "active" : ""} type="button" onClick={() => setActiveTab("products")}>产品</button>
+          <button className={activeTab === "blogs" ? "active" : ""} type="button" onClick={() => setActiveTab("blogs")}>Blog / News</button>
+          <button className={activeTab === "home" ? "active" : ""} type="button" onClick={() => setActiveTab("home")}>Home 页面</button>
+        </nav>
+        <div className="admin-app-actions">
+          <button type="button" onClick={loadContent} disabled={loading}>{loading ? "同步中" : "重新加载"}</button>
+          <button type="button" onClick={logout}>退出</button>
         </div>
-        {!contentLoaded ? <div className="admin-note">
-          <strong>发布说明</strong>
-          <p>保存后数据会写入项目文件。静态页面需要重新构建或重新部署后才会在前台更新。</p>
-        </div> : null}
-      </section>
+      </header>
 
       <section className="admin-main">
         <div className="admin-topbar">
           <div>
-            <p>内容管理</p>
+            <p>Content Control</p>
             <h2>{activeTitle}</h2>
           </div>
-          <span>{status}</span>
+          <span>{products.length} 个产品 · {blogs.length} 篇文章 · {homePage.sections.length} 个首页板块</span>
+        </div>
+        <div className={`admin-workspace-notice admin-note-${notice.tone}`}>
+          <strong>{notice.tone === "success" ? "完成" : notice.tone === "error" ? "需要处理" : "状态"}</strong>
+          <p>{notice.message}</p>
         </div>
 
-        <div className="admin-tabs">
-          <button className={activeTab === "products" ? "active" : ""} type="button" onClick={() => setActiveTab("products")}>产品</button>
-          <button className={activeTab === "blogs" ? "active" : ""} type="button" onClick={() => setActiveTab("blogs")}>Blog / News</button>
-          <button className={activeTab === "home" ? "active" : ""} type="button" onClick={() => setActiveTab("home")}>Home 页面</button>
-        </div>
-
-        {activeTab === "home" ? (
-          <div className="admin-form-layout admin-home-layout">
-            <aside className="admin-home-sections">
-              <div className="admin-panel-heading">
-                <span>页面板块</span>
-                <strong>拖动感先用上移 / 下移实现，顺序保存后首页同步。</strong>
+        {activeTab === "products" ? (
+          <div className="admin-form-layout">
+            <aside className="admin-list admin-product-sidebar">
+              <div className="admin-product-tools">
+                <button type="button" onClick={addProduct}>新增产品</button>
+                <label>
+                  批量导入
+                  <input type="file" accept=".json,.csv,application/json,text/csv" onChange={(event) => event.target.files?.[0] && importProductsFile(event.target.files[0])} />
+                </label>
               </div>
-              <div className="admin-home-section-list">
-                {homePage.sections
-                  .map((section, index) => ({ section, index }))
-                  .sort((a, b) => a.section.order - b.section.order)
-                  .map(({ section, index }) => (
-                    <button
-                      className={index === selectedHomeSection ? "active" : ""}
-                      key={section.id}
-                      type="button"
-                      onClick={() => chooseHomeSection(index)}
-                    >
-                      <span>{section.order}</span>
-                      <strong>{sectionNames[section.id]}</strong>
-                      <em>{section.enabled ? "显示中" : "已隐藏"}</em>
+              <input className="admin-list-search" value={productQuery} onChange={(event) => setProductQuery(event.target.value)} placeholder="搜索产品名称或分类" />
+              <div className="admin-category-tree">
+                <button className={selectedCategoryFilter === "all" ? "active" : ""} type="button" onClick={() => chooseProductFilter("all")}>
+                  <span>全部产品</span>
+                  <small>{products.length}</small>
+                </button>
+                {categoryTree.map((item) => (
+                  <div key={item.category}>
+                    <button className={selectedCategoryFilter === item.category ? "active" : ""} type="button" onClick={() => chooseProductFilter(item.category)}>
+                      <span>{item.category}</span>
+                      <small>{item.count}</small>
                     </button>
-                  ))}
-              </div>
-              <div className="admin-home-move">
-                <button type="button" onClick={() => moveHomeSection(-1)} disabled={!homeDraft}>上移</button>
-                <button type="button" onClick={() => moveHomeSection(1)} disabled={!homeDraft}>下移</button>
-              </div>
-              {homeDraft?.parts?.length ? (
-                <div className="admin-home-parts">
-                  <div className="admin-panel-heading">
-                    <span>当前板块部件</span>
-                    <strong>选中部件后，可单独调整位置、尺寸和显示。</strong>
-                  </div>
-                  <div className="admin-home-part-list">
-                    {homeDraft.parts.map((part, index) => (
+                    {item.subcategories.map((subcategory) => (
                       <button
-                        className={index === selectedHomePart ? "active" : ""}
-                        key={part.id}
+                        className={selectedCategoryFilter === `${item.category}||${subcategory.name}` ? "active" : ""}
+                        key={`${item.category}-${subcategory.name}`}
                         type="button"
-                        onClick={() => setSelectedHomePart(index)}
+                        onClick={() => chooseProductFilter(`${item.category}||${subcategory.name}`)}
                       >
-                        <strong>{part.label}</strong>
-                        <em>{part.enabled ? "显示" : "隐藏"}</em>
+                        <span>{subcategory.name}</span>
+                        <small>{subcategory.count}</small>
                       </button>
                     ))}
                   </div>
-                </div>
-              ) : null}
-            </aside>
-
-            <section className="admin-home-preview">
-              <div className="admin-preview-toolbar">
-                <div>
-                  <span>实时预览</span>
-                  <strong>保存后自动刷新首页效果</strong>
-                </div>
-                <div className="admin-preview-actions">
-                  <button className={homePreviewMode === "desktop" ? "active" : ""} type="button" onClick={() => setHomePreviewMode("desktop")}>电脑</button>
-                  <button className={homePreviewMode === "mobile" ? "active" : ""} type="button" onClick={() => setHomePreviewMode("mobile")}>手机</button>
-                  <button type="button" onClick={() => setHomePreviewKey((key) => key + 1)}>刷新</button>
-                </div>
+                ))}
               </div>
-              <div className={`admin-preview-frame ${homePreviewMode}`}>
-                <iframe ref={homePreviewRef} key={homePreviewKey} src={homePreviewUrl} title="Home 页面预览" onLoad={syncPreviewHighlight} />
-              </div>
-            </section>
-
-            <section className="admin-home-settings">
-              {homeDraft ? (
-                <>
-                  <div className="admin-home-summary">
-                    <strong>{sectionNames[homeDraft.id]}</strong>
-                    <span>现在可以调整个板块，也可以调当前板块里的单个部件。</span>
-                  </div>
-                  {currentHomePart ? (
-                    <div className="admin-part-editor">
-                      <div className="admin-part-editor-title">
-                        <span>正在编辑部件</span>
-                        <strong>{currentHomePart.label}</strong>
-                      </div>
-                      <div className="admin-form-grid">
-                        <label>
-                          显示这个部件
-                          <select
-                            value={currentHomePart.enabled ? "true" : "false"}
-                            onChange={(event) => updateHomePart({ ...currentHomePart, enabled: event.target.value === "true" })}
-                          >
-                            <option value="true">显示</option>
-                            <option value="false">隐藏</option>
-                          </select>
-                        </label>
-                        <label>
-                          文字对齐
-                          <select
-                            value={currentHomePart.align}
-                            onChange={(event) => updateHomePart({ ...currentHomePart, align: event.target.value as HomePartConfig["align"] })}
-                          >
-                            <option value="left">左对齐</option>
-                            <option value="center">居中</option>
-                            <option value="right">右对齐</option>
-                          </select>
-                        </label>
-                        <label>
-                          左右移动：{currentHomePart.x}px
-                          <input type="range" min="-300" max="300" value={currentHomePart.x} onChange={(event) => updateHomePart({ ...currentHomePart, x: Number(event.target.value) })} />
-                        </label>
-                        <label>
-                          上下移动：{currentHomePart.y}px
-                          <input type="range" min="-220" max="220" value={currentHomePart.y} onChange={(event) => updateHomePart({ ...currentHomePart, y: Number(event.target.value) })} />
-                        </label>
-                        <label>
-                          宽度：{currentHomePart.width}%
-                          <input type="range" min="20" max="160" value={currentHomePart.width} onChange={(event) => updateHomePart({ ...currentHomePart, width: Number(event.target.value) })} />
-                        </label>
-                        <label>
-                          最小高度：{currentHomePart.height}px
-                          <input type="range" min="0" max="700" value={currentHomePart.height} onChange={(event) => updateHomePart({ ...currentHomePart, height: Number(event.target.value) })} />
-                        </label>
-                        <label>
-                          缩放：{currentHomePart.scale}%
-                          <input type="range" min="50" max="160" value={currentHomePart.scale} onChange={(event) => updateHomePart({ ...currentHomePart, scale: Number(event.target.value) })} />
-                        </label>
-                        <label>
-                          透明度：{currentHomePart.opacity}%
-                          <input type="range" min="0" max="100" value={currentHomePart.opacity} onChange={(event) => updateHomePart({ ...currentHomePart, opacity: Number(event.target.value) })} />
-                        </label>
-                        <label>
-                          层级
-                          <input type="number" value={currentHomePart.z} onChange={(event) => updateHomePart({ ...currentHomePart, z: Number(event.target.value) || 1 })} />
-                        </label>
-                        <button className="admin-reset-part" type="button" onClick={() => updateHomePart(createHomePart(currentHomePart.id, currentHomePart.label, selectedHomePart))}>
-                          重置这个部件
-                        </button>
-                      </div>
-                    </div>
-                  ) : null}
-                  <div className="admin-form-grid">
-                    <label>
-                      显示这个板块
-                      <select
-                        value={homeDraft.enabled ? "true" : "false"}
-                        onChange={(event) => updateHomeDraft({ ...homeDraft, enabled: event.target.value === "true" })}
-                      >
-                        <option value="true">显示</option>
-                        <option value="false">隐藏</option>
-                      </select>
-                    </label>
-                    <label>
-                      排序数字
-                      <input
-                        type="number"
-                        value={homeDraft.order}
-                        onChange={(event) => updateHomeDraft({ ...homeDraft, order: Number(event.target.value) || 0 })}
-                      />
-                    </label>
-                    <label>
-                      布局
-                      <select
-                        value={homeDraft.layout}
-                        onChange={(event) => updateHomeDraft({ ...homeDraft, layout: event.target.value as HomeSectionConfig["layout"] })}
-                      >
-                        {layoutOptions.map((option) => (
-                          <option value={option} key={option}>{layoutOptionLabels[option]}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      背景
-                      <select
-                        value={homeDraft.background}
-                        onChange={(event) => updateHomeDraft({ ...homeDraft, background: event.target.value as HomeSectionConfig["background"] })}
-                      >
-                        {backgroundOptions.map((option) => (
-                          <option value={option} key={option}>{backgroundOptionLabels[option]}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      间距
-                      <select
-                        value={homeDraft.spacing}
-                        onChange={(event) => updateHomeDraft({ ...homeDraft, spacing: event.target.value as HomeSectionConfig["spacing"] })}
-                      >
-                        {spacingOptions.map((option) => (
-                          <option value={option} key={option}>{spacingOptionLabels[option]}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      小标题
-                      <input value={homeDraft.eyebrow} onChange={(event) => updateHomeDraft({ ...homeDraft, eyebrow: event.target.value })} />
-                    </label>
-                    <label className="wide">
-                      主标题
-                      <textarea rows={2} value={homeDraft.title} onChange={(event) => updateHomeDraft({ ...homeDraft, title: event.target.value })} />
-                    </label>
-                    <label className="wide">
-                      说明文字
-                      <textarea rows={4} value={homeDraft.copy} onChange={(event) => updateHomeDraft({ ...homeDraft, copy: event.target.value })} />
-                    </label>
-                    <label className="wide">
-                      按钮文字
-                      <input value={homeDraft.buttonLabel} onChange={(event) => updateHomeDraft({ ...homeDraft, buttonLabel: event.target.value })} />
-                    </label>
-                  </div>
-                  <div className="admin-actions">
-                    <button type="button" onClick={saveHome} disabled={loading}>保存并刷新预览</button>
-                    <a href="/" target="_blank" rel="noreferrer">预览首页</a>
-                  </div>
-                </>
-              ) : (
-                <p>请先加载内容，再选择一个 Home 板块。</p>
-              )}
-            </section>
-          </div>
-        ) : activeTab === "products" ? (
-          <div className="admin-form-layout">
-            <aside className="admin-list">
-              <button type="button" onClick={addProduct}>新增产品</button>
-              {products.map((product, index) => (
+              <p className="admin-list-title">当前分类产品</p>
+              {visibleProductEntries.map(({ product, index }) => (
                 <button className={index === selectedProduct ? "active" : ""} key={`${product.slug}-${index}`} type="button" onClick={() => chooseProduct(index)}>
-                  {product.name || "未命名产品"}
+                  <span>{product.name || "未命名产品"}</span>
+                  <small>{product.subcategory || product.category || "未分类"}</small>
                 </button>
               ))}
             </aside>
@@ -885,32 +674,52 @@ export function AdminPanel() {
               <div className="admin-form-grid">
                 <label>产品名称<input value={productDraft.name} onChange={(event) => setProductDraft({ ...productDraft, name: event.target.value })} /></label>
                 <label>短名称<input value={productDraft.shortName} onChange={(event) => setProductDraft({ ...productDraft, shortName: event.target.value })} /></label>
-                <label>URL Slug<input value={productDraft.slug} onChange={(event) => setProductDraft({ ...productDraft, slug: event.target.value })} /></label>
-                <label>分类<input value={productDraft.category} onChange={(event) => setProductDraft({ ...productDraft, category: event.target.value })} /></label>
+                <label>主分类<input value={productDraft.category} onChange={(event) => setProductDraft({ ...productDraft, category: event.target.value })} /></label>
+                <label>子分类<input value={productDraft.subcategory || ""} onChange={(event) => setProductDraft({ ...productDraft, subcategory: event.target.value })} /></label>
                 <label>容量范围<input value={productDraft.capacities} onChange={(event) => setProductDraft({ ...productDraft, capacities: event.target.value })} /></label>
                 <label>材质<input value={productDraft.materials} onChange={(event) => setProductDraft({ ...productDraft, materials: event.target.value })} /></label>
                 <label className="wide">产品主图路径<input value={productDraft.image} onChange={(event) => setProductDraft({ ...productDraft, image: event.target.value })} /></label>
-                <label className="wide">上传主图<input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadImage(event.target.files[0], "product")} /></label>
+                <label className="wide">上传主图<input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadImage(event.target.files[0], "product", (path) => setProductDraft({ ...productDraft, image: path }))} /></label>
                 <label className="wide">简短描述<textarea rows={3} value={productDraft.description} onChange={(event) => setProductDraft({ ...productDraft, description: event.target.value })} /></label>
                 <label className="wide">详细描述<textarea rows={5} value={productDraft.longDescription} onChange={(event) => setProductDraft({ ...productDraft, longDescription: event.target.value })} /></label>
-                <label>应用场景（一行一个）<textarea rows={6} value={arrayToLines(productDraft.applications)} onChange={(event) => setProductDraft({ ...productDraft, applications: linesToArray(event.target.value) })} /></label>
-                <label>产品特点（一行一个）<textarea rows={6} value={arrayToLines(productDraft.features)} onChange={(event) => setProductDraft({ ...productDraft, features: linesToArray(event.target.value) })} /></label>
-                <label>规格参数（一行一个，格式：参数 | 内容）<textarea rows={7} value={specsToText(productDraft.specifications)} onChange={(event) => setProductDraft({ ...productDraft, specifications: textToSpecs(event.target.value) })} /></label>
-                <label>可定制项（一行一个）<textarea rows={7} value={arrayToLines(productDraft.customization)} onChange={(event) => setProductDraft({ ...productDraft, customization: linesToArray(event.target.value) })} /></label>
               </div>
+              <details className="admin-advanced-panel">
+                <summary>高级内容（链接名、规格、特点、应用场景）</summary>
+                <div className="admin-form-grid">
+                  <label className="wide">产品链接名<input value={productDraft.slug} onChange={(event) => setProductDraft({ ...productDraft, slug: event.target.value })} /></label>
+                  <label>应用场景（一行一个）<textarea rows={5} value={arrayToLines(productDraft.applications)} onChange={(event) => setProductDraft({ ...productDraft, applications: linesToArray(event.target.value) })} /></label>
+                  <label>产品特点（一行一个）<textarea rows={5} value={arrayToLines(productDraft.features)} onChange={(event) => setProductDraft({ ...productDraft, features: linesToArray(event.target.value) })} /></label>
+                  <label className="wide">规格参数（格式：参数 | 内容）<textarea rows={6} value={specsToText(productDraft.specifications)} onChange={(event) => setProductDraft({ ...productDraft, specifications: textToSpecs(event.target.value) })} /></label>
+                  <label className="wide">可定制项（一行一个）<textarea rows={5} value={arrayToLines(productDraft.customization)} onChange={(event) => setProductDraft({ ...productDraft, customization: linesToArray(event.target.value) })} /></label>
+                </div>
+              </details>
+              <details className="admin-advanced-panel admin-category-manager">
+                <summary>分类参考</summary>
+                <p>产品页左侧导航会根据“主分类”和“子分类”自动生成。要新增分类，直接在当前产品里填写新的主分类或子分类并保存。</p>
+                <div>
+                  {categoryTree.map((item) => (
+                    <span key={item.category}>
+                      <b>{item.category}</b>
+                      {item.subcategories.length ? ` / ${item.subcategories.map((subcategory) => subcategory.name).join("、")}` : " / 无子级"}
+                    </span>
+                  ))}
+                </div>
+              </details>
               <div className="admin-actions">
                 <button type="button" onClick={saveProducts} disabled={loading || !productDraft.slug}>保存产品</button>
+                <button className="admin-danger" type="button" onClick={deleteProduct} disabled={loading || !products.length}>删除当前产品</button>
                 <a href={`/products/${productDraft.slug || ""}`} target="_blank" rel="noreferrer">预览产品</a>
               </div>
             </section>
           </div>
-        ) : (
+        ) : activeTab === "blogs" ? (
           <div className="admin-form-layout">
             <aside className="admin-list">
-              <button type="button" onClick={addBlog}>新增博客</button>
-              {blogs.map((blog, index) => (
+              <button type="button" onClick={addBlog}>新增文章</button>
+              <input className="admin-list-search" value={blogQuery} onChange={(event) => setBlogQuery(event.target.value)} placeholder="搜索标题、分类、关键词" />
+              {filteredBlogs.map(({ blog, index }) => (
                 <button className={index === selectedBlog ? "active" : ""} key={`${blog.slug}-${index}`} type="button" onClick={() => chooseBlog(index)}>
-                  {blog.title || "未命名博客"}
+                  {blog.title || "未命名文章"}
                 </button>
               ))}
             </aside>
@@ -924,13 +733,50 @@ export function AdminPanel() {
                 <label className="wide">Meta Description<textarea rows={3} value={blogDraft.metaDescription} onChange={(event) => setBlogDraft({ ...blogDraft, metaDescription: event.target.value })} /></label>
                 <label className="wide">文章简介（段落之间空一行）<textarea rows={5} value={paragraphsToText(blogDraft.intro)} onChange={(event) => setBlogDraft({ ...blogDraft, intro: textToParagraphs(event.target.value) })} /></label>
                 <label className="wide">正文内容（段落之间空一行）<textarea rows={12} value={blogBody} onChange={(event) => setBlogDraft({ ...blogDraft, sections: [{ h2: "Main Content", paragraphs: textToParagraphs(event.target.value) }] })} /></label>
-                <label className="wide">FAQ（一行一个，格式：问题 | 答案）<textarea rows={6} value={faqsToText(blogDraft.faq)} onChange={(event) => setBlogDraft({ ...blogDraft, faq: textToFaqs(event.target.value) })} /></label>
+                <label className="wide">FAQ（格式：问题 | 答案）<textarea rows={6} value={faqsToText(blogDraft.faq)} onChange={(event) => setBlogDraft({ ...blogDraft, faq: textToFaqs(event.target.value) })} /></label>
                 <label className="wide">结论（段落之间空一行）<textarea rows={4} value={paragraphsToText(blogDraft.conclusion)} onChange={(event) => setBlogDraft({ ...blogDraft, conclusion: textToParagraphs(event.target.value) })} /></label>
               </div>
               <div className="admin-actions">
-                <button type="button" onClick={saveBlogs} disabled={loading || !blogDraft.slug}>保存博客</button>
-                <a href={`/news/${blogDraft.slug || ""}`} target="_blank" rel="noreferrer">预览博客</a>
+                <button type="button" onClick={saveBlogs} disabled={loading || !blogDraft.slug}>保存文章</button>
+                <button className="admin-danger" type="button" onClick={deleteBlog} disabled={loading || !blogs.length}>删除当前文章</button>
+                <a href={`/news/${blogDraft.slug || ""}`} target="_blank" rel="noreferrer">预览文章</a>
               </div>
+            </section>
+          </div>
+        ) : (
+          <div className="admin-form-layout admin-home-simple-layout">
+            <aside className="admin-list">
+              {orderedHomeSections.map(({ section, index }) => (
+                <button className={index === selectedHomeSection ? "active" : ""} key={section.id} type="button" onClick={() => chooseHomeSection(index)}>
+                  {section.order}. {sectionNames[section.id]}
+                </button>
+              ))}
+            </aside>
+            <section className="admin-form-card">
+              {homeDraft ? (
+                <>
+                  <div className="admin-home-summary">
+                    <strong>{sectionNames[homeDraft.id]}</strong>
+                    <span>编辑板块文案和基础展示方式。更细的组件位置仍会保留原配置。</span>
+                  </div>
+                  <div className="admin-form-grid">
+                    <label>显示这个板块<select value={homeDraft.enabled ? "true" : "false"} onChange={(event) => updateHomeDraft({ ...homeDraft, enabled: event.target.value === "true" })}><option value="true">显示</option><option value="false">隐藏</option></select></label>
+                    <label>排序数字<input type="number" value={homeDraft.order} onChange={(event) => updateHomeDraft({ ...homeDraft, order: Number(event.target.value) || 0 })} /></label>
+                    <label>布局<select value={homeDraft.layout} onChange={(event) => updateHomeDraft({ ...homeDraft, layout: event.target.value as HomeSectionConfig["layout"] })}>{layoutOptions.map((option) => <option value={option} key={option}>{layoutLabels[option]}</option>)}</select></label>
+                    <label>背景<select value={homeDraft.background} onChange={(event) => updateHomeDraft({ ...homeDraft, background: event.target.value as HomeSectionConfig["background"] })}>{backgroundOptions.map((option) => <option value={option} key={option}>{backgroundLabels[option]}</option>)}</select></label>
+                    <label>间距<select value={homeDraft.spacing} onChange={(event) => updateHomeDraft({ ...homeDraft, spacing: event.target.value as HomeSectionConfig["spacing"] })}>{spacingOptions.map((option) => <option value={option} key={option}>{spacingLabels[option]}</option>)}</select></label>
+                    <label>小标题<input value={homeDraft.eyebrow} onChange={(event) => updateHomeDraft({ ...homeDraft, eyebrow: event.target.value })} /></label>
+                    <label className="wide">主标题<textarea rows={2} value={homeDraft.title} onChange={(event) => updateHomeDraft({ ...homeDraft, title: event.target.value })} /></label>
+                    <label className="wide">说明文字<textarea rows={4} value={homeDraft.copy} onChange={(event) => updateHomeDraft({ ...homeDraft, copy: event.target.value })} /></label>
+                    <label className="wide">按钮文字<input value={homeDraft.buttonLabel} onChange={(event) => updateHomeDraft({ ...homeDraft, buttonLabel: event.target.value })} /></label>
+                    <label className="wide">主图片路径<input value={homeDraft.image || ""} onChange={(event) => updateHomeDraft({ ...homeDraft, image: event.target.value })} /></label>
+                    <label className="wide">上传并替换主图片<input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadImage(event.target.files[0], "home", (path) => updateHomeDraft({ ...homeDraft, image: path }))} /></label>
+                    <label className="wide">多图列表（一行一个路径，用于应用卡片、产品轮播、工厂图、合作伙伴 Logo）<textarea rows={8} value={imagesToText(homeDraft.images)} onChange={(event) => updateHomeDraft({ ...homeDraft, images: linesToArray(event.target.value) })} /></label>
+                    <label className="wide">上传并追加到多图列表<input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadImage(event.target.files[0], "home", (path) => updateHomeDraft({ ...homeDraft, images: [...(homeDraft.images || []), path] }))} /></label>
+                  </div>
+                  <div className="admin-actions"><button type="button" onClick={saveHome} disabled={loading}>保存 Home 页面</button><a href="/" target="_blank" rel="noreferrer">打开首页</a></div>
+                </>
+              ) : <p>请先选择一个 Home 板块。</p>}
             </section>
           </div>
         )}

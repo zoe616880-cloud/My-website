@@ -86,14 +86,13 @@ export const megaMenus = {
     title: "Industrial scales built for the way you work.",
     items: [
       { icon: Warehouse, title: "Truck Scales", copy: "Above-ground and pit-mounted truck weighing systems", href: "/products?category=truck-scales" },
-      { icon: Gauge, title: "Portable Axle Weighers", copy: "Portable axle weighing for vehicles and field checks", href: "/products?category=portable-axle-weighers" },
       { icon: Box, title: "Industrial Platform Scales", copy: "Bench, counting and platform weighing equipment", href: "/products?category=industrial-platform-scales" },
       { icon: Factory, title: "Industrial Floor Scales", copy: "Low-profile, mobile and stainless steel floor scales", href: "/products?category=industrial-floor-scales" },
       { icon: ClipboardList, title: "Table Top Scales", copy: "Compact table top scales for daily weighing work", href: "/products?category=table-top-scales" },
       { icon: Gauge, title: "Balances", copy: "Analytical and electronic balances for precise weighing", href: "/products?category=balances" },
       { icon: Settings, title: "Weighing Solutions", copy: "Dynamic and static tank scale project solutions", href: "/products?category=weighing-solutions" },
       { icon: PackageCheck, title: "Weighing Module Systems", copy: "Module systems for tanks, hoppers and structures", href: "/products?category=weighing-module-systems" },
-      { icon: ShieldCheck, title: "Load Cells & Sensors", copy: "Load cells and sensors for scale integration", href: "/products?category=load-cells-sensors" },
+      { icon: ShieldCheck, title: "Scale Accessories", copy: "Load cells, indicators, cables and junction boxes", href: "/products?category=scale-accessories" },
     ],
   },
   news: {

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { isAdminAuthorized, writeHomePageFile } from "@/lib/admin-content";
 import { readHomePageConfig } from "@/lib/home-page-content";
 

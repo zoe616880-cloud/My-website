@@ -44,6 +44,8 @@ export type HomeSectionConfig = {
   title: string;
   copy: string;
   buttonLabel: string;
+  image?: string;
+  images?: string[];
   layout: HomeLayout;
   background: HomeBackground;
   spacing: HomeSpacing;

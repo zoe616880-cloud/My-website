@@ -11,4 +11,8 @@ static-preview-server.js
 START_FULL_PREVIEW.bat
 npm-debug.log*
 dev-server*.log
+preview-*.log
+tsconfig.tsbuildinfo
 exports/
+data/inquiries.json
+.env*.local

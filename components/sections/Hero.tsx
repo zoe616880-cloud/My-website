@@ -2,12 +2,16 @@ import Link from "next/link";
 import { ArrowRight } from "@/components/icons";
 import type { HomeSectionConfig } from "@/data/home-page";
 import { homePartClass, homePartStyle } from "@/lib/home-parts";
+import type { CSSProperties } from "react";
 
 export function Hero({ config }: { config?: HomeSectionConfig }) {
   const titleLines = (config?.title || "Industrial Weighing\nBuilt Around Your Application.").split("\n");
+  const heroStyle = config?.image
+    ? ({ "--hero-image": `url("${config.image}")` } as CSSProperties)
+    : undefined;
 
   return (
-    <section className="hero">
+    <section className="hero" style={heroStyle}>
       <div className="hero-inner">
         <div className="hero-copy">
           <div className={homePartClass(config, "eyebrow", "hero-label")} style={homePartStyle(config, "eyebrow")}>{config?.eyebrow || "Source industrial weighing manufacturer"}</div>

@@ -1,88 +1,124 @@
-{
-  "sections": [
-    {
-      "id": "hero",
-      "enabled": true,
-      "order": 1,
-      "eyebrow": "Source industrial weighing manufacturer",
-      "title": "Industrial Weighing\nBuilt Around Your Application.",
-      "copy": "Custom bench scales, floor scales and industrial weighing systems for importers, distributors, contractors and EPC projects.",
-      "buttonLabel": "Get a Quote",
-      "layout": "default",
-      "background": "image",
-      "spacing": "standard"
-    },
-    {
-      "id": "applications",
-      "enabled": false,
-      "order": 3,
-      "eyebrow": "Find your weighing direction",
-      "title": "Choose by real working scene.",
-      "copy": "Select a scale by workflow, load type and site condition. Each scene leads to practical product directions for quotation.",
-      "buttonLabel": "View suitable systems",
-      "layout": "grid",
-      "background": "soft",
-      "spacing": "standard"
-    },
-    {
-      "id": "products",
-      "enabled": true,
-      "order": 4,
-      "eyebrow": "",
-      "title": "Proven scale platforms.",
-      "copy": "Select by application and build the right weighing system faster.",
-      "buttonLabel": "Explore products",
-      "layout": "portfolio",
-      "background": "white",
-      "spacing": "standard"
-    },
-    {
-      "id": "advantages",
-      "enabled": true,
-      "order": 5,
-      "eyebrow": "Why choose us",
-      "title": "WHY CHOOSE ASIA WEIGHING",
-      "copy": "Clear support from product selection to delivery, installation and long-term service.",
-      "buttonLabel": "",
-      "layout": "split",
-      "background": "soft",
-      "spacing": "standard"
-    },
-    {
-      "id": "factory",
-      "enabled": true,
-      "order": 2,
-      "eyebrow": "Company profile",
-      "title": "Company profile",
-      "copy": "Our core work covers bench scales, floor scales, animal scales and application-specific industrial weighing structures. We work with importers, distributors, contractors and project buyers who need product configuration rather than a generic catalog item.",
-      "buttonLabel": "Company details",
-      "layout": "split",
-      "background": "white",
-      "spacing": "standard"
-    },
-    {
-      "id": "news",
-      "enabled": true,
-      "order": 6,
-      "eyebrow": "News Center",
-      "title": "News Overview",
-      "copy": "",
-      "buttonLabel": "Read More",
-      "layout": "split",
-      "background": "white",
-      "spacing": "standard"
-    },
-    {
-      "id": "partners",
-      "enabled": true,
-      "order": 7,
-      "eyebrow": "Cooperation",
-      "title": "COOPERATION PARTNERS",
-      "copy": "",
-      "buttonLabel": "",
-      "layout": "marquee",
-      "background": "soft",
-      "spacing": "standard"
-    }
-  ]
+﻿{
+    "sections":  [
+                     {
+                         "id":  "hero",
+                         "enabled":  true,
+                         "order":  1,
+                         "eyebrow":  "Source industrial weighing manufacturer",
+                         "title":  "Industrial Weighing\nBuilt Around Your Application.",
+                         "copy":  "Custom bench scales, floor scales and industrial weighing systems for importers, distributors, contractors and EPC projects.",
+                         "buttonLabel":  "Get a Quote",
+                         "layout":  "default",
+                         "background":  "image",
+                         "spacing":  "standard",
+                         "image":  "/factory-modern.png"
+                     },
+                     {
+                         "id":  "applications",
+                         "enabled":  false,
+                         "order":  3,
+                         "eyebrow":  "Find your weighing direction",
+                         "title":  "Choose by real working scene.",
+                         "copy":  "Select a scale by workflow, load type and site condition. Each scene leads to practical product directions for quotation.",
+                         "buttonLabel":  "View suitable systems",
+                         "layout":  "grid",
+                         "background":  "soft",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/factory-modern.png",
+                                        "/uploads/products/truck-scales-steel-deck-above-ground-or-pit-mounted-truck-scale.png",
+                                        "/uploads/products/industrial-platform-scales-guardrail-platform-scale.png",
+                                        "/uploads/products/industrial-floor-scales-washable-stainless-steel-floor-scale.jpg"
+                                    ]
+                     },
+                     {
+                         "id":  "products",
+                         "enabled":  true,
+                         "order":  4,
+                         "eyebrow":  "",
+                         "title":  "Proven scale platforms.",
+                         "copy":  "Select by application and build the right weighing system faster.",
+                         "buttonLabel":  "Explore products",
+                         "layout":  "portfolio",
+                         "background":  "white",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/uploads/products/transparent-home/centered/official-counting-bench-scale.png",
+                                        "/uploads/products/transparent-home/centered/industrial-platform-scales-guardrail-platform-scale.png",
+                                        "/uploads/products/transparent-home/centered/truck-scales-steel-deck-above-ground-truck-scale.png",
+                                        "/uploads/products/transparent-home/centered/portable-axle-weighers-portable-axle-weigher.png",
+                                        "/uploads/products/transparent-home/centered/official-electronic-scale.png",
+                                        "/uploads/products/transparent-home/centered/official-weighing-module-system.png",
+                                        "/uploads/products/transparent-home/centered/truck-scales-steel-concrete-deck-above-ground-truck-scale.png"
+                                    ]
+                     },
+                     {
+                         "id":  "advantages",
+                         "enabled":  true,
+                         "order":  5,
+                         "eyebrow":  "Why choose us",
+                         "title":  "WHY CHOOSE ASIA WEIGHING",
+                         "copy":  "Clear support from product selection to delivery, installation and long-term service.",
+                         "buttonLabel":  "",
+                         "layout":  "split",
+                         "background":  "soft",
+                         "spacing":  "standard"
+                     },
+                     {
+                         "id":  "factory",
+                         "enabled":  true,
+                         "order":  2,
+                         "eyebrow":  "Company profile",
+                         "title":  "Company profile",
+                         "copy":  "Our core work covers bench scales, floor scales, animal scales and application-specific industrial weighing structures. We work with importers, distributors, contractors and project buyers who need product configuration rather than a generic catalog item.",
+                         "buttonLabel":  "Company details",
+                         "layout":  "split",
+                         "background":  "white",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/uploads/factory/warehouse-platform-scale-frames.png",
+                                        "/uploads/factory/warehouse-platform-scale-frames.png",
+                                        "/uploads/factory/warehouse-platform-scale-frames.png"
+                                    ]
+                     },
+                     {
+                         "id":  "news",
+                         "enabled":  true,
+                         "order":  6,
+                         "eyebrow":  "News Center",
+                         "title":  "News Overview",
+                         "copy":  "",
+                         "buttonLabel":  "Read More",
+                         "layout":  "split",
+                         "background":  "white",
+                         "spacing":  "standard",
+                         "image":  "/uploads/news/floor-scale-workshop-overview.png"
+                     },
+                     {
+                         "id":  "partners",
+                         "enabled":  true,
+                         "order":  7,
+                         "eyebrow":  "Cooperation",
+                         "title":  "COOPERATION PARTNERS",
+                         "copy":  "",
+                         "buttonLabel":  "",
+                         "layout":  "marquee",
+                         "background":  "soft",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/uploads/partners/dini-argeo.jpg",
+                                        "/uploads/partners/t-scale.jpg",
+                                        "/uploads/partners/mms.jpg",
+                                        "/uploads/partners/keli.jpg",
+                                        "/uploads/partners/transcell.jpg",
+                                        "/uploads/partners/mettler.jpg",
+                                        "/uploads/partners/yaohua.jpg",
+                                        "/uploads/partners/excell.jpg",
+                                        "/uploads/partners/zemic.jpg",
+                                        "/uploads/partners/mavin.jpg",
+                                        "/uploads/partners/ohaus.jpg",
+                                        "/uploads/partners/sartorius.jpg"
+                                    ]
+                     }
+                 ]
 }

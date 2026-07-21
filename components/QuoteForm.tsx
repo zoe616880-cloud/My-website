@@ -5,10 +5,33 @@ import { Check } from "./icons";
 
 export function QuoteForm() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSent(true);
+    setSending(true);
+    setError("");
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+    try {
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Submission failed.");
+      }
+      form.reset();
+      setSent(true);
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Submission failed. Please email ida@asiaweigh.com.");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (sent) {
@@ -73,8 +96,9 @@ export function QuoteForm() {
           required
         />
       </label>
-      <button className="button form-submit" type="submit">
-        Submit Request
+      {error ? <p className="form-error" role="alert">{error}</p> : null}
+      <button className="button form-submit" type="submit" disabled={sending}>
+        {sending ? "Sending..." : "Submit Request"}
       </button>
       <p className="form-note">
         Your information is used only to prepare your quotation.

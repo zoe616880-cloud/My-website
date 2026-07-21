@@ -18,8 +18,7 @@ export function SiteFooter() {
           <Link href="/products?category=truck-scales">Truck Scales</Link>
           <Link href="/products?category=industrial-floor-scales">Industrial Floor Scales</Link>
           <Link href="/products?category=industrial-platform-scales">Industrial Platform Scales</Link>
-          <Link href="/products?category=portable-axle-weighers">Portable Axle Weighers</Link>
-          <Link href="/products?category=load-cells-sensors">Load Cells & Sensors</Link>
+          <Link href="/products?category=scale-accessories">Scale Accessories</Link>
         </div>
         <div>
           <h3>Company</h3>

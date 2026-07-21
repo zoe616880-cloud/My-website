@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+﻿import { promises as fs } from "fs";
 import path from "path";
 import type { Product } from "@/data/products";
 import type { BlogPost } from "@/data/blog-posts";
@@ -20,6 +20,7 @@ export async function writeProductsFile(products: Product[]) {
   name: string;
   shortName: string;
   category: string;
+  subcategory?: string;
   description: string;
   longDescription: string;
   image: string;

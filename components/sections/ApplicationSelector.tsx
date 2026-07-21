@@ -13,6 +13,8 @@ const sceneImages = [
 ];
 
 export function ApplicationSelector({ config }: { config?: HomeSectionConfig }) {
+  const configuredImages = config?.images?.length ? config.images : sceneImages;
+
   return (
     <section className={`selector-section home-bg-${config?.background || "soft"} home-spacing-${config?.spacing || "standard"}`}>
       <div className="section selector-inner">
@@ -29,7 +31,7 @@ export function ApplicationSelector({ config }: { config?: HomeSectionConfig }) 
             <Link href="/products" className={homePartClass(config, `${partPrefix}-card`)} style={homePartStyle(config, `${partPrefix}-card`)} key={title}>
               <div className={homePartClass(config, `${partPrefix}-image`, "selector-card-image")} style={homePartStyle(config, `${partPrefix}-image`)}>
                 <Image
-                  src={sceneImages[index]}
+                  src={configuredImages[index] || sceneImages[index]}
                   alt={`${title} weighing scene`}
                   width={520}
                   height={320}

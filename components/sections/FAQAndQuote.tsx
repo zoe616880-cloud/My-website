@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { HomeSectionConfig } from "@/data/home-page";
 import { homePartClass, homePartStyle } from "@/lib/home-parts";
 
-const partners = [
+const defaultPartners = [
   { name: "dini argeo", image: "/uploads/partners/dini-argeo.jpg" },
   { name: "T-scale", image: "/uploads/partners/t-scale.jpg" },
   { name: "MMS", image: "/uploads/partners/mms.jpg" },
@@ -20,36 +20,27 @@ const partners = [
 ];
 
 const visibleRowsPerColumn = 3;
-const columnCount = 4;
-
-function wrapPartnerIndex(index: number) {
-  return ((index % partners.length) + partners.length) % partners.length;
-}
+const columnCount = 3;
 
 export function FAQAndQuote({ config }: { config?: HomeSectionConfig }) {
-  const [step, setStep] = useState(0);
+  const partners = useMemo(
+    () =>
+      (config?.images?.length ? config.images : defaultPartners.map((partner) => partner.image)).map((image, index) => ({
+        name: defaultPartners[index]?.name || `Partner ${index + 1}`,
+        image,
+      })),
+    [config?.images],
+  );
   const partnerColumns = useMemo(
     () =>
       Array.from({ length: columnCount }, (_, columnIndex) =>
-        Array.from({ length: visibleRowsPerColumn }, (_, rowIndex) => {
-          const partnerIndex = wrapPartnerIndex(step + columnIndex * visibleRowsPerColumn + rowIndex);
-
-          return {
-            ...partners[partnerIndex],
-            originalIndex: partnerIndex,
-          };
-        }),
-      ),
-    [step],
+        partners
+          .map((partner, originalIndex) => ({ ...partner, originalIndex }))
+          .filter((_, partnerIndex) => partnerIndex % columnCount === columnIndex),
+      ).map((column) => (column.length ? column : partners.map((partner, originalIndex) => ({ ...partner, originalIndex })))),
+    [partners],
   );
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setStep((current) => wrapPartnerIndex(current + 1));
-    }, 2400);
-
-    return () => window.clearInterval(timer);
-  }, []);
 
   return (
     <section className={`news-partners section home-bg-${config?.background || "soft"} home-spacing-${config?.spacing || "standard"}`} id="news-guide">
@@ -67,15 +58,15 @@ export function FAQAndQuote({ config }: { config?: HomeSectionConfig }) {
                 }`}
                 key={`partner-column-${columnIndex + 1}`}
               >
-                <div className="partner-column-track" key={`partner-column-track-${columnIndex + 1}-${step}`}>
-                  {column.map((partner) => {
+                <div className="partner-column-track">
+                  {[...column, ...column].map((partner, loopIndex) => {
                     const partId = `partner-${partner.originalIndex + 1}-logo`;
 
                     return (
                       <div
                         className={homePartClass(config, partId, "partner-logo")}
                         style={homePartStyle(config, partId)}
-                        key={`${partner.name}-${step}-${columnIndex}`}
+                        key={`${partner.name}-${columnIndex}-${loopIndex}`}
                       >
                         <img src={partner.image} alt={`${partner.name} partner logo`} />
                       </div>

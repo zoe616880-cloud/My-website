@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+﻿import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 import { isAdminAuthorized } from "@/lib/admin-content";
@@ -13,7 +13,7 @@ function cleanFileName(name: string) {
 }
 
 function cleanUploadTarget(value: FormDataEntryValue | null) {
-  return value === "product" ? "products" : value === "blog" ? "blogs" : "";
+  return value === "product" ? "products" : value === "blog" ? "blogs" : value === "home" ? "home" : "";
 }
 
 export async function POST(request: Request) {

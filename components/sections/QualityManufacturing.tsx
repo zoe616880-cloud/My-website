@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "@/components/icons";
 import type { HomeSectionConfig } from "@/data/home-page";
 import { homePartClass, homePartStyle } from "@/lib/home-parts";
+import type { CSSProperties } from "react";
 
 const profileStats = [
   { value: "2014", label: "Established" },
@@ -11,6 +12,9 @@ const profileStats = [
 ];
 
 export function QualityManufacturing({ config }: { config?: HomeSectionConfig }) {
+  const images = config?.images?.length ? config.images : ["/factory-modern.png", "/factory.jpg", "/hero-welding-banner.png"];
+  const factoryPhoto = images[0];
+
   return (
     <section className={`quality-section factory-layout-${config?.layout || "split"} home-bg-${config?.background || "white"} home-spacing-${config?.spacing || "standard"}`} id="about">
       <div className="quality-watermark" aria-hidden="true">About</div>
@@ -30,7 +34,10 @@ export function QualityManufacturing({ config }: { config?: HomeSectionConfig })
           Company details <ArrowRight size={15} />
         </Link>
       </div>
-      <div className={homePartClass(config, "image", "quality-image")} style={homePartStyle(config, "image")}>
+      <div
+        className={homePartClass(config, "image", "quality-image")}
+        style={{ ...homePartStyle(config, "image"), "--quality-photo": `url("${factoryPhoto}")` } as CSSProperties}
+      >
         {[1, 2, 3].map((index) => (
           <div
             className={`quality-photo-strip quality-photo-strip-${index}`}

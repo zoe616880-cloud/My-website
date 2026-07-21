@@ -37,16 +37,28 @@ const plantDisplay = [
     image: "/uploads/factory/plant-display-prepared-products.jpg",
   },
   {
-    title: "Factory press",
-    image: "/uploads/factory/plant-display-factory-press.jpg",
-  },
-  {
     title: "Assembly line",
     image: "/uploads/factory/plant-display-assembly.jpg",
   },
   {
     title: "Factory stock area",
     image: "/uploads/factory/plant-display-stock.jpg",
+  },
+  {
+    title: "Fabrication workshop",
+    image: "/uploads/factory/welding-workshop-highres.jpg",
+  },
+  {
+    title: "Steel frame production",
+    image: "/uploads/factory/welding-workshop-strip-1.jpg",
+  },
+  {
+    title: "Workshop welding area",
+    image: "/uploads/factory/welding-workshop-strip-2.jpg",
+  },
+  {
+    title: "Final welding inspection",
+    image: "/uploads/factory/welding-workshop-strip-3.jpg",
   },
 ];
 

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { blogPosts } from "@/data/blog-posts";
 import { isAdminAuthorized, writeBlogsFile } from "@/lib/admin-content";
 
