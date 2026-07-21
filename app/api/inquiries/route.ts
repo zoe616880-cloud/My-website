@@ -84,11 +84,17 @@ function buildText(payload: Required<InquiryPayload>) {
 }
 
 async function saveInquiry(record: Record<string, unknown>) {
-  await fs.mkdir(path.dirname(inquiriesFile), { recursive: true });
-  const existing = await fs.readFile(inquiriesFile, "utf8").catch(() => "[]");
-  const inquiries = JSON.parse(existing) as Record<string, unknown>[];
-  inquiries.unshift(record);
-  await fs.writeFile(inquiriesFile, JSON.stringify(inquiries.slice(0, 500), null, 2));
+  try {
+    await fs.mkdir(path.dirname(inquiriesFile), { recursive: true });
+    const existing = await fs.readFile(inquiriesFile, "utf8").catch(() => "[]");
+    const inquiries = JSON.parse(existing) as Record<string, unknown>[];
+    inquiries.unshift(record);
+    await fs.writeFile(inquiriesFile, JSON.stringify(inquiries.slice(0, 500), null, 2));
+    return true;
+  } catch (error) {
+    console.warn("Inquiry local save skipped:", error);
+    return false;
+  }
 }
 
 function waitForSmtp(socket: Socket, expected: number[]) {
@@ -237,7 +243,7 @@ export async function POST(request: Request) {
     }
 
     const emailResult = await sendEmail(payload);
-    await saveInquiry({
+    const saved = await saveInquiry({
       ...payload,
       recipient: inquiryEmail,
       emailSent: emailResult.sent,
@@ -245,10 +251,22 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
     });
 
+    if (!emailResult.sent) {
+      return NextResponse.json(
+        {
+          error: "Inquiry email is not configured on the server.",
+          recipient: inquiryEmail,
+          saved,
+        },
+        { status: 503 },
+      );
+    }
+
     return NextResponse.json({
       ok: true,
       recipient: inquiryEmail,
       emailSent: emailResult.sent,
+      saved,
     });
   } catch (error) {
     return NextResponse.json(
