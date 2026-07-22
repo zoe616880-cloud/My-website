@@ -192,13 +192,7 @@ export function GuardrailProductPage({ product, parentCategoryHref }: GuardrailP
             </div>
 
             <div className={styles.productVisual} aria-hidden="true">
-              <Image
-                src="/uploads/products/transparent-home/clean/industrial-platform-scales-guardrail-platform-scale.png"
-                alt=""
-                fill
-                priority
-                sizes="(max-width: 760px) 88vw, 58vw"
-              />
+              <div className={styles.turntableSprite} />
             </div>
 
             <div className={styles.videoFrame}>

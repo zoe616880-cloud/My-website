@@ -325,41 +325,63 @@
   animation: productSpinIn 1.55s cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
 }
 
+.turntableSprite {
+  position: absolute;
+  inset: 0;
+  background-image: url("/media/guardrail-turntable.png");
+  background-position: 0% 0%;
+  background-repeat: no-repeat;
+  background-size: 400% 200%;
+  filter: drop-shadow(0 30px 35px rgba(21, 47, 65, 0.16));
+  transform: translateZ(1px);
+}
+
+.motionIntro[data-auto-complete] .turntableSprite {
+  animation: turntableFrames 1.55s steps(1, end) 90ms both;
+}
+
+@keyframes turntableFrames {
+  0%, 12.49% { background-position: 0% 0%; }
+  12.5%, 24.99% { background-position: 33.333% 0%; }
+  25%, 37.49% { background-position: 66.666% 0%; }
+  37.5%, 49.99% { background-position: 100% 0%; }
+  50%, 62.49% { background-position: 0% 100%; }
+  62.5%, 74.99% { background-position: 33.333% 100%; }
+  75%, 87.49% { background-position: 66.666% 100%; }
+  87.5%, 99.99% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
 @keyframes productSpinIn {
   0% {
     opacity: 0;
     filter: brightness(0.72) drop-shadow(34px 38px 18px rgba(15, 37, 55, 0.08));
-    transform: translate3d(16vw, 12vh, -280px) rotateX(7deg) rotateY(-360deg) scale(0.38);
+    transform: translate3d(16vw, 12vh, -280px) rotateX(7deg) scale(0.38);
   }
 
   24% {
     opacity: 0.68;
     filter: brightness(0.82) drop-shadow(24px 34px 22px rgba(15, 37, 55, 0.12));
-    transform: translate3d(9vw, 7vh, -150px) rotateX(5deg) rotateY(-270deg) scale(0.64);
+    transform: translate3d(9vw, 7vh, -150px) rotateX(5deg) scale(0.64);
   }
 
   50% {
     opacity: 1;
     filter: brightness(0.95) drop-shadow(0 32px 28px rgba(15, 37, 55, 0.16));
-    transform: translate3d(3.5vw, 2vh, -60px) rotateX(3deg) rotateY(-180deg) scale(0.86);
+    transform: translate3d(3.5vw, 2vh, -60px) rotateX(3deg) scale(0.86);
   }
 
   76% {
     opacity: 1;
     filter: brightness(0.84) drop-shadow(-20px 30px 24px rgba(15, 37, 55, 0.15));
-    transform: translate3d(-1.2vw, -0.8vh, 22px) rotateX(1deg) rotateY(-90deg) scale(1.025);
+    transform: translate3d(-1.2vw, -0.8vh, 22px) rotateX(1deg) scale(1.025);
   }
 
   100% {
     opacity: 1;
     filter: brightness(1) drop-shadow(0 30px 35px rgba(21, 47, 65, 0.16));
-    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1);
+    transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
   }
-}
-
-.productVisual img {
-  object-fit: contain;
-  object-position: center bottom;
 }
 
 .productCopy {
@@ -1111,5 +1133,10 @@
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .motionIntro[data-auto-complete] .turntableSprite {
+    animation: none;
+    background-position: 0% 0%;
   }
 }
