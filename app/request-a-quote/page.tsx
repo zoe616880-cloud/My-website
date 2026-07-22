@@ -18,10 +18,10 @@ export default function QuotePage() {
         <section className="quote-page-inner">
           <div className="quote-page-intro">
             <p>Request a quotation</p>
-            <h1>Get the right scale proposal faster.</h1>
+            <h1>Ask first. Confirm details later.</h1>
             <span>
-              Share a few details about your weighing job. We will recommend a
-              suitable model, capacity and configuration for your project.
+              Send a quick message about the product you need. Our team will
+              help confirm the model, capacity and configuration.
             </span>
             <div className="quote-promise-list">
               <span><Check size={15} /> Reply within 24 hours on working days</span>

@@ -166,7 +166,7 @@ async function sendSmtpEmail(payload: Required<InquiryPayload>) {
     const message = [
       `From: ${fromEmail}`,
       `To: ${inquiryEmail}`,
-      `Reply-To: ${payload.email}`,
+      ...(payload.email ? [`Reply-To: ${payload.email}`] : []),
       `Subject: =?UTF-8?B?${Buffer.from(subject).toString("base64")}?=`,
       "MIME-Version: 1.0",
       `Content-Type: multipart/alternative; boundary="${boundary}"`,
@@ -229,7 +229,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as InquiryPayload;
     const payload = {
-      name: clean(body.name),
+      name: clean(body.name) || "Quick website inquiry",
       email: clean(body.email),
       whatsapp: clean(body.whatsapp),
       country: clean(body.country),
@@ -238,8 +238,8 @@ export async function POST(request: Request) {
       requirement: clean(body.requirement),
     };
 
-    if (!payload.name || !payload.email || !payload.country || !payload.requirement) {
-      return NextResponse.json({ error: "Please complete name, email, country and requirement." }, { status: 400 });
+    if ((!payload.email && !payload.whatsapp) || !payload.country) {
+      return NextResponse.json({ error: "Please complete email or WhatsApp and country." }, { status: 400 });
     }
 
     const emailResult = await sendEmail(payload);

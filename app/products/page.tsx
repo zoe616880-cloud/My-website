@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, Check } from "@/components/icons";
 import { SiteFooter } from "@/components/SiteFooter";
 import { products } from "@/data/products";
@@ -50,7 +52,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     items.map((product) => (
       <article className="catalog-card" key={product.slug}>
         <a href={`/products/${product.slug}`} className="catalog-image">
-          <img src={product.image} alt={product.name} />
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 760px) 46vw, (max-width: 1100px) 42vw, 320px"
+            quality={68}
+          />
         </a>
         <div className="catalog-copy">
           <small>{product.category}</small>
@@ -91,48 +99,52 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             </div>
           </div>
           <div className="products-catalog-layout">
-            <aside className="product-category-sidebar" aria-label="Product categories">
+            <aside className="product-category-sidebar" id="product-categories" aria-label="Product categories">
               <strong>Categories</strong>
-              <a href="/products" className={!selectedCategory ? "active" : undefined}>
+              <Link href="/products" scroll={false} className={!selectedCategory ? "active" : undefined}>
                 <span className="product-sidebar-count">{products.length}</span>
                 <span className="product-sidebar-label">All Products</span>
-              </a>
+              </Link>
               {categories.map((category) => {
                 const subcategories = subcategoriesByCategory[category] || [];
 
                 return subcategories.length ? (
-                  <details className="product-sidebar-group" key={category} open={selectedCategory === category}>
-                    <summary
+                  <div className={`product-sidebar-group${selectedCategory === category ? " open" : ""}`} key={category}>
+                    <Link
+                      href={`/products?category=${categoryId(category)}`}
+                      scroll={false}
                       className={selectedCategory === category && !selectedSubcategory ? "active product-sidebar-parent" : "product-sidebar-parent"}
                     >
                       <span className="product-sidebar-count">{products.filter((product) => product.category === category).length}</span>
                       <span className="product-sidebar-label">{category}</span>
-                    </summary>
+                    </Link>
                     <div className="product-subcategory-list">
                       {subcategories.map((subcategory) => {
                         const count = products.filter((product) => product.category === category && product.subcategory === subcategory).length;
                         return (
-                          <a
+                          <Link
                             href={`/products?category=${categoryId(category)}&subcategory=${categoryId(subcategory)}`}
+                            scroll={false}
                             className={selectedCategory === category && selectedSubcategory === subcategory ? "active" : undefined}
                             key={subcategory}
                           >
                             <span className="product-sidebar-count">{count}</span>
                             <span className="product-sidebar-label">{subcategory}</span>
-                          </a>
+                          </Link>
                         );
                       })}
                     </div>
-                  </details>
+                  </div>
                 ) : (
-                  <a
+                  <Link
                     href={`/products?category=${categoryId(category)}`}
+                    scroll={false}
                     className={selectedCategory === category ? "active" : undefined}
                     key={category}
                   >
                     <span className="product-sidebar-count">{products.filter((product) => product.category === category).length}</span>
                     <span className="product-sidebar-label">{category}</span>
-                  </a>
+                  </Link>
                 )
               })}
             </aside>

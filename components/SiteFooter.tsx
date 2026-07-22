@@ -13,12 +13,18 @@ export function SiteFooter() {
             weighing components and export-ready project supply.
           </p>
         </div>
-        <div>
+        <div className="footer-products">
           <h3>Products</h3>
           <Link href="/products?category=truck-scales">Truck Scales</Link>
-          <Link href="/products?category=industrial-floor-scales">Industrial Floor Scales</Link>
           <Link href="/products?category=industrial-platform-scales">Industrial Platform Scales</Link>
+          <Link href="/products?category=industrial-floor-scales">Industrial Floor Scales</Link>
+          <Link href="/products?category=balances">Balances</Link>
+          <Link href="/products?category=weighing-solutions">Weighing Solutions</Link>
+          <Link href="/products?category=weighing-module-systems">Weighing Module Systems</Link>
           <Link href="/products?category=scale-accessories">Scale Accessories</Link>
+          <Link href="/products?category=test-weights">Test Weights</Link>
+          <Link href="/products?category=crane-scales">Crane Scales</Link>
+          <Link href="/products?category=table-top-scales">Table Top Scales</Link>
         </div>
         <div>
           <h3>Company</h3>

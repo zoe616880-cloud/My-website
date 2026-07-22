@@ -1,7 +1,9 @@
 ﻿import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { ArrowRight, ClipboardList, MessageCircle, PackageCheck, Settings, ShieldCheck, Truck } from "@/components/icons";
 import { SiteFooter } from "@/components/SiteFooter";
+import { GuardrailProductPage } from "@/components/GuardrailProductPage";
 import { getProduct, products, type Product } from "@/data/products";
 
 type ProductPageProps = {
@@ -141,6 +143,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (!product) notFound();
   const categories = Array.from(new Set(products.map((item) => item.category)));
   const categoryId = (category: string) => category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const parentCategoryHref = `/products?category=${categoryId(product.category)}#product-categories`;
+  if (product.slug === "industrial-platform-scales-guardrail-platform-scale") {
+    return <GuardrailProductPage product={product} parentCategoryHref={parentCategoryHref} />;
+  }
   const availableSizes =
     product.specifications.find(([label]) => label === "Available sizes")?.[1]
       .split(",")
@@ -166,8 +172,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <main className="product-catalog-detail-page">
         <section className="catalog-detail-hero">
           <div className="catalog-detail-hero-inner">
+            <a className="product-back-link" href={parentCategoryHref}>
+              <ArrowRight size={16} aria-hidden="true" />
+              Back to {product.category}
+            </a>
             <div className="catalog-detail-media">
-              <img src={product.image} alt={product.name} />
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                priority
+                sizes="(max-width: 760px) 94vw, (max-width: 1100px) 52vw, 720px"
+                quality={74}
+              />
               <a className="catalog-whatsapp" href="https://wa.me/8613775237471?text=Hello%2C%20I%20am%20interested%20in%20your%20products.%20Please%20send%20me%20more%20details.">
                 <MessageCircle size={15} /> WhatsApp
               </a>

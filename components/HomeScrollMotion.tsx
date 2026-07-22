@@ -16,6 +16,7 @@ const INTERACTIVE_SELECTOR = [
   ".product-carousel-card",
 ].join(",");
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const MOBILE_MOTION_QUERY = "(max-width: 760px)";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -24,6 +25,7 @@ function clamp(value: number, min: number, max: number) {
 export function HomeScrollMotion() {
   useEffect(() => {
     const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+    const mobileMotionQuery = window.matchMedia(MOBILE_MOTION_QUERY);
     const root = document.documentElement;
     let observer: IntersectionObserver | null = null;
     let frame = 0;
@@ -136,21 +138,23 @@ export function HomeScrollMotion() {
       window.removeEventListener("resize", requestProgressUpdate);
     };
 
-    if (!mediaQuery.matches) {
+    if (!mediaQuery.matches && !mobileMotionQuery.matches) {
       enableMotion();
     }
 
     const handlePreferenceChange = () => {
       disableMotion();
-      if (!mediaQuery.matches) {
+      if (!mediaQuery.matches && !mobileMotionQuery.matches) {
         enableMotion();
       }
     };
 
     mediaQuery.addEventListener("change", handlePreferenceChange);
+    mobileMotionQuery.addEventListener("change", handlePreferenceChange);
 
     return () => {
       mediaQuery.removeEventListener("change", handlePreferenceChange);
+      mobileMotionQuery.removeEventListener("change", handlePreferenceChange);
       disableMotion();
     };
   }, []);
