@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ArrowRight, ClipboardList, MessageCircle, PackageCheck, Settings, ShieldCheck, Truck } from "@/components/icons";
 import { SiteFooter } from "@/components/SiteFooter";
-import { GuardrailProductPage } from "@/components/GuardrailProductPage";
 import { getProduct, products, type Product } from "@/data/products";
 
 type ProductPageProps = {
@@ -144,9 +143,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const categories = Array.from(new Set(products.map((item) => item.category)));
   const categoryId = (category: string) => category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const parentCategoryHref = `/products?category=${categoryId(product.category)}#product-categories`;
-  if (product.slug === "industrial-platform-scales-guardrail-platform-scale") {
-    return <GuardrailProductPage product={product} parentCategoryHref={parentCategoryHref} />;
-  }
   const availableSizes =
     product.specifications.find(([label]) => label === "Available sizes")?.[1]
       .split(",")
