@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Asia Weighing SMTP Test",
+    "email": "test@example.com",
+    "whatsapp": "+86 10000000000",
+    "country": "China",
+    "product": "Floor scale",
+    "quantity": "1",
+    "requirement": "This is a test inquiry from the website SMTP setup after SMTP DATA fix.",
+    "recipient": "ida@asiaweigh.com",
+    "emailSent": true,
+    "emailId": "smtp-1784514254672",
+    "createdAt": "2026-07-20T02:24:14.674Z"
+  },
+  {
+    "name": "Codex Test Lead",
+    "email": "test@example.com",
+    "whatsapp": "+86 10000000000",
+    "country": "China",
+    "product": "Floor scale",
+    "quantity": "1",
+    "requirement": "Test inquiry for ida@asiaweigh.com receiving setup.",
+    "recipient": "ida@asiaweigh.com",
+    "emailSent": false,
+    "emailId": null,
+    "createdAt": "2026-07-20T01:59:39.853Z"
+  }
+]

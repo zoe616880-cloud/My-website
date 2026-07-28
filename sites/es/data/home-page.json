@@ -1,0 +1,124 @@
+﻿{
+    "sections":  [
+                     {
+                         "id":  "hero",
+                         "enabled":  true,
+                         "order":  1,
+                         "eyebrow":  "Fabricante de equipos de pesaje industrial",
+                         "title":  "Pesaje industrial\npara su aplicación.",
+                         "copy":  "Básculas de mesa, de piso y sistemas de pesaje industrial para importadores, distribuidores, contratistas y proyectos EPC.",
+                         "buttonLabel":  "Solicitar cotización",
+                         "layout":  "default",
+                         "background":  "image",
+                         "spacing":  "standard",
+                         "image":  "/factory-modern.png"
+                     },
+                     {
+                         "id":  "applications",
+                         "enabled":  false,
+                         "order":  3,
+                         "eyebrow":  "Find your weighing direction",
+                         "title":  "Choose by real working scene.",
+                         "copy":  "Select a scale by workflow, load type and site condition. Each scene leads to practical product directions for quotation.",
+                         "buttonLabel":  "View suitable systems",
+                         "layout":  "grid",
+                         "background":  "soft",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/factory-modern.png",
+                                        "/uploads/products/truck-scales-steel-deck-above-ground-or-pit-mounted-truck-scale.png",
+                                        "/uploads/products/industrial-platform-scales-guardrail-platform-scale.png",
+                                        "/uploads/products/industrial-floor-scales-washable-stainless-steel-floor-scale.jpg"
+                                    ]
+                     },
+                     {
+                         "id":  "products",
+                         "enabled":  true,
+                         "order":  4,
+                         "eyebrow":  "",
+                         "title":  "Plataformas de pesaje comprobadas.",
+                         "copy":  "Elija según la aplicación y configure más rápido el sistema de pesaje adecuado.",
+                         "buttonLabel":  "Ver productos",
+                         "layout":  "portfolio",
+                         "background":  "white",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/uploads/products/transparent-home/centered/official-counting-bench-scale.png",
+                                        "/uploads/products/transparent-home/centered/industrial-platform-scales-guardrail-platform-scale.png",
+                                        "/uploads/products/transparent-home/centered/truck-scales-steel-deck-above-ground-truck-scale.png",
+                                        "/uploads/products/transparent-home/centered/portable-axle-weighers-portable-axle-weigher.png",
+                                        "/uploads/products/transparent-home/centered/official-electronic-scale.png",
+                                        "/uploads/products/transparent-home/centered/official-weighing-module-system.png",
+                                        "/uploads/products/transparent-home/centered/truck-scales-steel-concrete-deck-above-ground-truck-scale.png"
+                                    ]
+                     },
+                     {
+                         "id":  "advantages",
+                         "enabled":  true,
+                         "order":  5,
+                         "eyebrow":  "Por qué elegirnos",
+                         "title":  "POR QUÉ ELEGIR ASIA WEIGHING",
+                         "copy":  "Soporte claro desde la selección hasta la entrega, instalación y servicio a largo plazo.",
+                         "buttonLabel":  "",
+                         "layout":  "split",
+                         "background":  "soft",
+                         "spacing":  "standard"
+                     },
+                     {
+                         "id":  "factory",
+                         "enabled":  true,
+                         "order":  2,
+                         "eyebrow":  "Perfil de la empresa",
+                         "title":  "Perfil de la empresa",
+                         "copy":  "Fabricamos básculas de mesa, de piso, ganaderas y estructuras industriales para aplicaciones específicas. Trabajamos con importadores, distribuidores, contratistas y compradores de proyectos.",
+                         "buttonLabel":  "Información de la empresa",
+                         "layout":  "split",
+                         "background":  "white",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/uploads/factory/warehouse-platform-scale-frames.png",
+                                        "/uploads/factory/warehouse-platform-scale-frames.png",
+                                        "/uploads/factory/warehouse-platform-scale-frames.png"
+                                    ]
+                     },
+                     {
+                         "id":  "news",
+                         "enabled":  true,
+                         "order":  6,
+                         "eyebrow":  "Centro de noticias",
+                         "title":  "Resumen de noticias",
+                         "copy":  "",
+                         "buttonLabel":  "Leer más",
+                         "layout":  "split",
+                         "background":  "white",
+                         "spacing":  "standard",
+                         "image":  "/uploads/news/floor-scale-workshop-overview.png"
+                     },
+                     {
+                         "id":  "partners",
+                         "enabled":  true,
+                         "order":  7,
+                         "eyebrow":  "Cooperación",
+                         "title":  "SOCIOS DE COOPERACIÓN",
+                         "copy":  "",
+                         "buttonLabel":  "",
+                         "layout":  "marquee",
+                         "background":  "soft",
+                         "spacing":  "standard",
+                         "images":  [
+                                        "/uploads/partners/dini-argeo.jpg",
+                                        "/uploads/partners/t-scale.jpg",
+                                        "/uploads/partners/mms.jpg",
+                                        "/uploads/partners/keli.jpg",
+                                        "/uploads/partners/transcell.jpg",
+                                        "/uploads/partners/mettler.jpg",
+                                        "/uploads/partners/yaohua.jpg",
+                                        "/uploads/partners/excell.jpg",
+                                        "/uploads/partners/zemic.jpg",
+                                        "/uploads/partners/mavin.jpg",
+                                        "/uploads/partners/ohaus.jpg",
+                                        "/uploads/partners/sartorius.jpg"
+                                    ]
+                     }
+                 ]
+}
