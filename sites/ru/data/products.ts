@@ -502,11 +502,11 @@ export const products: Product[] = [
   },
   {
     "slug": "industrial-platform-scales-tcs-as1-mild-steel-platform-scale",
-    "name": "TCS-AS1 Mild Steel Platform Scale",
-    "shortName": "TCS-AS1 Mild Steel",
+    "name": "Mild Steel Platform Scale",
+    "shortName": "Mild Steel Platform",
     "category": "Industrial Platform Scales",
     "description": "Carbon steel platform scale with a high-strength powder-coated frame and stainless steel weighing pan. The platform can be supplied with 201 stainless steel, with 430 or 304 stainless steel options available.",
-    "longDescription": "TCS-AS1 is a durable low-carbon steel platform scale for general industrial weighing. Its high-strength powder-coated carbon steel frame is paired with a 201 stainless steel weighing pan, with 430 or 304 stainless steel pan options available for different environments.",
+    "longDescription": "A durable low-carbon steel platform scale for general industrial weighing. Its high-strength powder-coated carbon steel frame is paired with a 201 stainless steel weighing pan, with 430 or 304 stainless steel pan options available for different environments.",
     "image": "/uploads/products/platform-scale-tcs-as1.png",
     "capacities": "30kg-600kg configurable range",
     "materials": "Powder-coated carbon steel frame with stainless steel weighing pan",
@@ -525,15 +525,11 @@ export const products: Product[] = [
     "specifications": [
       [
         "Product style",
-        "TCS-AS1 Mild Steel Platform Scale"
+        "Mild Steel Platform Scale"
       ],
       [
         "Category",
         "Industrial Platform Scales"
-      ],
-      [
-        "Model",
-        "TCS-AS1"
       ],
       [
         "Capacity range",
@@ -555,11 +551,11 @@ export const products: Product[] = [
   },
   {
     "slug": "industrial-platform-scales-tcs-as1-ss-stainless-steel-platform-scale",
-    "name": "TCS-AS1-SS Stainless Steel Platform Scale",
-    "shortName": "TCS-AS1-SS Stainless",
+    "name": "Stainless Steel Platform Scale",
+    "shortName": "Stainless Steel Platform",
     "category": "Industrial Platform Scales",
     "description": "Full 304 stainless steel polished frame and weighing pan with a waterproof load cell. Designed for hygienic weighing work in wet or washdown environments.",
-    "longDescription": "TCS-AS1-SS is a full stainless steel platform scale featuring a polished 304 stainless steel frame and weighing pan. Waterproof load cells from Mavin, Zemic or Keli can be specified for dependable use in wet, food-processing and washdown applications.",
+    "longDescription": "A full stainless steel platform scale featuring a polished 304 stainless steel frame and weighing pan. Waterproof load cells from Mavin, Zemic or Keli can be specified for dependable use in wet, food-processing and washdown applications.",
     "image": "/uploads/products/platform-scale-tcs-as1-ss.png",
     "capacities": "30kg-600kg configurable range",
     "materials": "Full 304 stainless steel",
@@ -578,15 +574,11 @@ export const products: Product[] = [
     "specifications": [
       [
         "Product style",
-        "TCS-AS1-SS Stainless Steel Platform Scale"
+        "Stainless Steel Platform Scale"
       ],
       [
         "Category",
         "Industrial Platform Scales"
-      ],
-      [
-        "Model",
-        "TCS-AS1-SS"
       ],
       [
         "Capacity range",

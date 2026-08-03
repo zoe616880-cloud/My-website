@@ -28,6 +28,11 @@ const subcategories: Record<string, string> = {
   "Portable Balance": "Портативные весы",
 };
 
+const productTitles: Record<string, string> = {
+  "industrial-platform-scales-tcs-as1-mild-steel-platform-scale": "Платформенные весы из углеродистой стали",
+  "industrial-platform-scales-tcs-as1-ss-stainless-steel-platform-scale": "Платформенные весы из нержавеющей стали",
+};
+
 const plainNumber = (value: string) => !/[A-Za-z]{3}/.test(value);
 
 export function localizeCategory(category: string) {
@@ -48,7 +53,7 @@ export function localizeProduct(product: Product): Product {
   const category = localizeCategory(product.category);
   const model = modelOf(product);
   const capacity = plainNumber(product.capacities) ? product.capacities : "По техническому заданию";
-  const name = [category, model].filter(Boolean).join(" — ");
+  const name = productTitles[product.slug] || [category, model].filter(Boolean).join(" — ");
   return {
     ...product,
     name,
