@@ -501,15 +501,15 @@ export const products: Product[] = [
     ]
   },
   {
-    "slug": "industrial-platform-scales-counting-bench-scale",
-    "name": "Counting bench scale",
-    "shortName": "Counting bench",
+    "slug": "industrial-platform-scales-tcs-as1-mild-steel-platform-scale",
+    "name": "TCS-AS1 Mild Steel Platform Scale",
+    "shortName": "TCS-AS1 Mild Steel",
     "category": "Industrial Platform Scales",
-    "description": "1. Thickened 304 stainless steel weighing pan with reinforced edge (anti-deformation) 2. Precision load cell 3. Quick-detach weighing pan with smooth surface for easy cleaning of industrial debris 4. High-resolution LCD indicators with quantity/weight display 5. Four 304 stainless steel shock-absorbing feet with rubber pads (anti-slip and anti-vibration) 6. Stainless steel adjustable pole with locking fixture for indicator stability",
-    "longDescription": "1. Thickened 304 stainless steel weighing pan with reinforced edge (anti-deformation) 2. Precision load cell 3. Quick-detach weighing pan with smooth surface for easy cleaning of industrial debris 4. High-resolution LCD indicators with quantity/weight display 5. Four 304 stainless steel shock-absorbing feet with rubber pads (anti-slip and anti-vibration) 6. Stainless steel adjustable pole with locking fixture for indicator stability",
-    "image": "/uploads/products/official-counting-bench-scale.png",
+    "description": "Carbon steel platform scale with a high-strength powder-coated frame and stainless steel weighing pan. The platform can be supplied with 201 stainless steel, with 430 or 304 stainless steel options available.",
+    "longDescription": "TCS-AS1 is a durable low-carbon steel platform scale for general industrial weighing. Its high-strength powder-coated carbon steel frame is paired with a 201 stainless steel weighing pan, with 430 or 304 stainless steel pan options available for different environments.",
+    "image": "/uploads/products/platform-scale-tcs-as1.png",
     "capacities": "30kg-600kg configurable range",
-    "materials": "Mild steel or stainless steel options",
+    "materials": "Powder-coated carbon steel frame with stainless steel weighing pan",
     "applications": [
       "Factory weighing",
       "Warehouse receiving",
@@ -517,16 +517,15 @@ export const products: Product[] = [
       "Export project supply"
     ],
     "features": [
-      "Thickened 304 stainless steel weighing pan with reinforced edge (anti-deformation)",
-      "Precision load cell",
-      "Quick-detach weighing pan with smooth surface for easy cleaning of industrial debris",
-      "High-resolution LCD indicators with quantity/weight display",
-      "Four 304 stainless steel shock-absorbing feet with rubber pads (anti-slip and anti-vibration)"
+      "High-strength powder-coated carbon steel frame",
+      "201 stainless steel weighing pan",
+      "430 or 304 stainless steel pan available on request",
+      "Configurable indicator, capacity and platform size"
     ],
     "specifications": [
       [
         "Product style",
-        "Counting bench scale"
+        "TCS-AS1 Mild Steel Platform Scale"
       ],
       [
         "Category",
@@ -534,7 +533,7 @@ export const products: Product[] = [
       ],
       [
         "Model",
-        "Configured by product series"
+        "TCS-AS1"
       ],
       [
         "Capacity range",
@@ -542,7 +541,7 @@ export const products: Product[] = [
       ],
       [
         "Material",
-        "Mild steel or stainless steel options"
+        "Powder-coated carbon steel frame with stainless steel weighing pan"
       ],
     ],
     "customization": [
@@ -551,6 +550,58 @@ export const products: Product[] = [
       "Material and surface treatment",
       "Indicator and signal output",
       "Load cell selection",
+      "Export packing and documentation"
+    ]
+  },
+  {
+    "slug": "industrial-platform-scales-tcs-as1-ss-stainless-steel-platform-scale",
+    "name": "TCS-AS1-SS Stainless Steel Platform Scale",
+    "shortName": "TCS-AS1-SS Stainless",
+    "category": "Industrial Platform Scales",
+    "description": "Full 304 stainless steel polished frame and weighing pan with a waterproof load cell. Designed for hygienic weighing work in wet or washdown environments.",
+    "longDescription": "TCS-AS1-SS is a full stainless steel platform scale featuring a polished 304 stainless steel frame and weighing pan. Waterproof load cells from Mavin, Zemic or Keli can be specified for dependable use in wet, food-processing and washdown applications.",
+    "image": "/uploads/products/platform-scale-tcs-as1-ss.png",
+    "capacities": "30kg-600kg configurable range",
+    "materials": "Full 304 stainless steel",
+    "applications": [
+      "Food and beverage processing",
+      "Wet and washdown areas",
+      "Factory weighing",
+      "Warehouse receiving"
+    ],
+    "features": [
+      "Full 304 stainless steel polished frame and weighing pan",
+      "Waterproof load cell options from Mavin, Zemic or Keli",
+      "Easy-clean hygienic structure",
+      "Configurable indicator, capacity and platform size"
+    ],
+    "specifications": [
+      [
+        "Product style",
+        "TCS-AS1-SS Stainless Steel Platform Scale"
+      ],
+      [
+        "Category",
+        "Industrial Platform Scales"
+      ],
+      [
+        "Model",
+        "TCS-AS1-SS"
+      ],
+      [
+        "Capacity range",
+        "30kg-600kg configurable range"
+      ],
+      [
+        "Material",
+        "Full 304 stainless steel"
+      ]
+    ],
+    "customization": [
+      "Capacity and division",
+      "Platform or structure size",
+      "Indicator and signal output",
+      "Waterproof load cell selection",
       "Export packing and documentation"
     ]
   },
