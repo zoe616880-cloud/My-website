@@ -15,27 +15,27 @@ export function QuoteForm() {
   const [requirement, setRequirement] = useState("");
 
   const productOptions = [
-    "Truck scale",
-    "Floor scale",
-    "Bench scale",
-    "Load cell",
-    "Indicator",
-    "Balance",
-    "Not sure yet",
+    "Автомобильные весы",
+    "Напольные весы",
+    "Настольные весы",
+    "Тензодатчик",
+    "Весовой терминал",
+    "Лабораторные весы",
+    "Пока не определился",
   ];
 
   const templates = [
     {
-      label: "Truck scale",
-      text: "Truck scale: capacity __ tons, platform size __ m, installation above ground / pit mounted.",
+      label: "Автомобильные весы",
+      text: "Автомобильные весы: грузоподъёмность __ т, размер платформы __ м, установка надземная / в приямке.",
     },
     {
-      label: "Floor scale",
-      text: "Floor scale: capacity __ kg, platform size __, material carbon steel / stainless steel.",
+      label: "Напольные весы",
+      text: "Напольные весы: грузоподъёмность __ кг, размер платформы __, материал — углеродистая / нержавеющая сталь.",
     },
     {
-      label: "Bench scale",
-      text: "Bench scale: capacity __ kg, division __ g, used for packing / counting / checking.",
+      label: "Настольные весы",
+      text: "Настольные весы: грузоподъёмность __ кг, цена деления __ г, применение — упаковка / подсчёт / контроль.",
     },
   ];
 
@@ -55,7 +55,7 @@ export function QuoteForm() {
     };
 
     if (!cleanContact || !payload.country) {
-      setError("Please leave your email or WhatsApp and country.");
+      setError("Укажите email или WhatsApp и страну.");
       setSending(false);
       return;
     }
@@ -68,7 +68,7 @@ export function QuoteForm() {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || data.error) {
-        throw new Error(data.error || "Submission failed.");
+        throw new Error(data.error || "Не удалось отправить запрос.");
       }
       setContact("");
       setCountry("");
@@ -78,7 +78,7 @@ export function QuoteForm() {
       setStep(1);
       setSent(true);
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "Submission failed. Please email ida@asiaweigh.com.");
+      setError(submitError instanceof Error ? submitError.message : "Не удалось отправить запрос. Напишите нам: ida@asiaweigh.com.");
     } finally {
       setSending(false);
     }
@@ -90,10 +90,10 @@ export function QuoteForm() {
         <span>
           <Check size={28} />
         </span>
-        <h3>Request received</h3>
-        <p>Thank you. Our sales team will contact you soon.</p>
+        <h3>Запрос получен</h3>
+        <p>Спасибо! Наш отдел продаж свяжется с вами в ближайшее время.</p>
         <button className="text-button" onClick={() => setSent(false)}>
-          Send another request
+          Отправить ещё один запрос
         </button>
       </div>
     );
@@ -102,19 +102,19 @@ export function QuoteForm() {
   return (
     <form className="quote-form" onSubmit={submit}>
       <div className="quote-form-head">
-        <strong>Quick inquiry</strong>
-        <span>Start with one product type and one sentence. We can confirm the details with you later.</span>
+        <strong>Быстрый запрос</strong>
+        <span>Укажите тип продукции и кратко опишите задачу. Детали уточним позже.</span>
         {step === 1 ? (
-          <a className="quote-whatsapp-card" href="https://wa.me/8613775237471?text=Hello%2C%20I%20want%20to%20ask%20about%20weighing%20scale%20products." target="_blank" rel="noreferrer">
-            <span>Prefer chatting?</span>
-            <strong>Send requirements on WhatsApp</strong>
+          <a className="quote-whatsapp-card" href="https://wa.me/8613775237471?text=Здравствуйте%2C%20я%20хочу%20узнать%20больше%20о%20вашем%20весовом%20оборудовании." target="_blank" rel="noreferrer">
+            <span>Предпочитаете WhatsApp?</span>
+            <strong>Отправить запрос в WhatsApp</strong>
           </a>
         ) : null}
       </div>
 
       {step === 1 ? (
         <div className="quote-step quote-step-first">
-          <span className="quote-step-label">1. What are you looking for?</span>
+          <span className="quote-step-label">1. Что вы ищете?</span>
           <div className="product-choice-grid">
             {productOptions.map((option) => (
               <button
@@ -133,50 +133,50 @@ export function QuoteForm() {
             type="button"
             onClick={() => {
               if (!selectedProduct) {
-                setError("Please choose a product type first.");
+                setError("Сначала выберите тип продукции.");
                 return;
               }
               setError("");
               setStep(2);
             }}
           >
-            Continue
+            Продолжить
           </button>
         </div>
       ) : (
         <>
           <div className="quote-step">
-            <span className="quote-step-label">2. How can we reply?</span>
+            <span className="quote-step-label">2. Как с вами связаться?</span>
             <div className="selected-product-row">
               <span>{selectedProduct}</span>
-              <button type="button" onClick={() => setStep(1)}>Change</button>
+              <button type="button" onClick={() => setStep(1)}>Изменить</button>
             </div>
             <div className="quick-form-grid">
               <label>
-                <span>Email or WhatsApp *</span>
+                <span>Email или WhatsApp *</span>
                 <input
                   autoComplete="email"
-                  placeholder="name@company.com or +86..."
+                  placeholder="name@company.com или +86..."
                   value={contact}
                   onChange={(event) => setContact(event.target.value)}
                   required
                 />
               </label>
               <label>
-                <span>Country *</span>
+                <span>Страна *</span>
                 <input
                   autoComplete="country-name"
-                  placeholder="Destination country"
+                  placeholder="Страна назначения"
                   value={country}
                   onChange={(event) => setCountry(event.target.value)}
                   required
                 />
               </label>
               <label>
-                <span>Quantity</span>
+                <span>Количество</span>
                 <input
                   inputMode="numeric"
-                  placeholder="1 set, 5 pcs..."
+                  placeholder="1 комплект, 5 шт..."
                   value={quantity}
                   onChange={(event) => setQuantity(event.target.value)}
                 />
@@ -185,9 +185,9 @@ export function QuoteForm() {
           </div>
 
           <div className="quote-step">
-        <span className="quote-step-label">3. Add details if you have them</span>
+        <span className="quote-step-label">3. Добавьте детали, если они есть</span>
         <label>
-          <span>Requirement</span>
+          <span>Требования</span>
               <div className="requirement-helper">
                 {templates.map((template) => (
                   <button
@@ -201,7 +201,7 @@ export function QuoteForm() {
               </div>
               <textarea
                 rows={2}
-                placeholder="Example: I need a 60 ton truck scale for export to Indonesia."
+                placeholder="Например: Мне нужны автомобильные весы на 60 т для экспорта в Индонезию."
                 value={requirement}
                 onChange={(event) => setRequirement(event.target.value)}
               />
@@ -209,12 +209,12 @@ export function QuoteForm() {
           </div>
           {error ? <p className="form-error" role="alert">{error}</p> : null}
           <button className="button form-submit" type="submit" disabled={sending}>
-            {sending ? "Sending..." : "Send Quick Inquiry"}
+            {sending ? "Отправка..." : "Отправить быстрый запрос"}
           </button>
         </>
       )}
       <p className="form-note">
-        No full specification needed now. We will help you confirm it.
+        Полная спецификация пока не нужна. Мы поможем её уточнить.
       </p>
     </form>
   );

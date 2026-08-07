@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const defaultMessage =
-  "Hello, I am interested in your products. Please send me more details.";
+  "Здравствуйте! Меня интересует ваша продукция. Пожалуйста, отправьте мне подробную информацию.";
 
 function buildWhatsappUrl(message: string) {
   return `https://wa.me/8613775237471?text=${encodeURIComponent(message)}`;
@@ -14,29 +14,29 @@ export function WhatsAppFloatingButton() {
   const [message, setMessage] = useState(defaultMessage);
   const whatsappUrl = buildWhatsappUrl(message || defaultMessage);
   const quickMessages = [
-    "Please send me your product catalog.",
-    "I need a quotation for industrial floor scales.",
-    "Can you recommend a weighing scale for my application?",
+    "Пожалуйста, отправьте каталог продукции.",
+    "Мне нужен расчёт стоимости промышленных напольных весов.",
+    "Помогите подобрать весы для моей задачи.",
   ];
 
   return (
     <div className="whatsapp-widget">
       {open ? (
-        <div className="whatsapp-chat" role="dialog" aria-label="WhatsApp chat window">
+        <div className="whatsapp-chat" role="dialog" aria-label="Окно чата WhatsApp">
           <div className="whatsapp-chat-header">
             <div>
               <strong>Asia Weighing</strong>
-              <span>Usually replies on WhatsApp</span>
+              <span>Обычно отвечаем в WhatsApp</span>
             </div>
-            <button type="button" aria-label="Close WhatsApp chat" onClick={() => setOpen(false)}>
+            <button type="button" aria-label="Закрыть чат WhatsApp" onClick={() => setOpen(false)}>
               ×
             </button>
           </div>
           <div className="whatsapp-chat-body">
             <div className="whatsapp-message received">
-              Hello, how can we help with your weighing scale project?
+              Здравствуйте! Чем мы можем помочь с вашим проектом по весовому оборудованию?
             </div>
-            <div className="whatsapp-quick-list" aria-label="Quick WhatsApp messages">
+            <div className="whatsapp-quick-list" aria-label="Быстрые сообщения WhatsApp">
               {quickMessages.map((quickMessage) => (
                 <button
                   key={quickMessage}
@@ -47,7 +47,7 @@ export function WhatsAppFloatingButton() {
                 </button>
               ))}
             </div>
-            <label htmlFor="whatsapp-message">Your message</label>
+            <label htmlFor="whatsapp-message">Ваше сообщение</label>
             <textarea
               id="whatsapp-message"
               value={message}
@@ -56,7 +56,7 @@ export function WhatsAppFloatingButton() {
             />
           </div>
           <a className="whatsapp-send" href={whatsappUrl} target="_blank" rel="noreferrer">
-            Start WhatsApp Chat
+            Начать чат в WhatsApp
           </a>
         </div>
       ) : null}
@@ -65,7 +65,7 @@ export function WhatsAppFloatingButton() {
         className="whatsapp-float"
         type="button"
         onClick={() => setOpen((value) => !value)}
-        aria-label={open ? "Close WhatsApp chat window" : "Open WhatsApp chat window"}
+        aria-label={open ? "Закрыть окно чата WhatsApp" : "Открыть окно чата WhatsApp"}
         aria-expanded={open}
       >
         <span className="whatsapp-float-ring" aria-hidden="true" />
